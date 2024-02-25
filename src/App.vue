@@ -1,30 +1,16 @@
 <template>
-  <nav>
-    <router-link to="/dang-nhap">Login</router-link> |
-    <router-link to="/dang-ky">Register</router-link>
-  </nav>
+  <!-- <DangNhap /> -->
   <router-view/>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+  import dangNhapVue from "./views/dang-nhap.vue";
+  import { defineComponent } from "vue";
 
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+  export default defineComponent({
+    components:{
+      DangNhap:dangNhapVue,
+      
+    },
+  })
+</script>
