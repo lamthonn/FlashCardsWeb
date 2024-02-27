@@ -17,6 +17,23 @@ const routes = [
     component: () => import('../views/dang-ky.vue')
   },
   {
+    path: '/user',
+    name: '/user',
+    meta: {
+      breadcrumb: 'User' 
+    },
+    children:[
+      {
+        path: '/ho-so',
+        name: '/ho-so',
+        component: () => import('@/views/user/ho-so/index.vue'),
+        meta: {
+          breadcrumb: 'Hồ sơ' 
+        }
+      }
+    ]
+  },
+  {
     path: '/trang-chu',
     name: '/trang-chu',
     component: () => import('../views/trang-chu/index.vue'),
@@ -34,7 +51,7 @@ const router = createRouter({
 // Navigation Guard để kiểm tra xem người dùng đã đăng nhập chưa
 router.beforeEach((to, from, next) => {
   // Kiểm tra nếu đường dẫn không phải là trang đăng nhập và người dùng chưa đăng nhập
-  if (to.name !== '/dang-nhap' && !checkTokenExpiration()) {
+  if (to.name !== '/dang-nhap' && to.name !== '/dang-ky' && !checkTokenExpiration()) {
     // Redirect người dùng đến trang đăng nhập
     next({ name: '/dang-nhap' });
   } else {

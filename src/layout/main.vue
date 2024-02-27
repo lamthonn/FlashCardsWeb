@@ -1,10 +1,12 @@
 <template>
   <a-layout-header class="header">
+    
     <div class="logo" />
     <a-menu theme="light" mode="horizontal" :style="{ lineHeight: '60px' }">
       <a-menu-item
         key="1"
-        style="font-family: 'Anta', sans-serif; font-size: 2rem"
+        style="font-family: 'Anta', sans-serif; font-size: 2rem;"
+        @click="returnToTrangChu"
         >VocaLearn</a-menu-item
       >
     </a-menu>
@@ -12,24 +14,14 @@
   <a-layout>
     <a-layout-sider width="230" style="background: #fff">
       <a-menu
-        v-model:selectedKeys="selectedKeys2"
-        v-model:openKeys="openKeys"
+        v-model:selectedKeys="state.selectedKeys"
+        v-model:openKeys="state.openKeys"
+        :inline-collapsed="state.collapsed"
         mode="inline"
         :style="{ height: '100vh', borderRight: 0 }"
-      >
-        <a-sub-menu key="sub1">
-          <template #title>
-            <span>
-              <user-outlined />
-              subnav 1
-            </span>
-          </template>
-          <a-menu-item key="1">option1</a-menu-item>
-          <a-menu-item key="2">option2</a-menu-item>
-          <a-menu-item key="3">option3</a-menu-item>
-          <a-menu-item key="4">option4</a-menu-item>
-        </a-sub-menu>
-      </a-menu>
+        :items="menu"
+        @click="handleClick"
+      ></a-menu>
     </a-layout-sider>
     <a-layout style="padding: 0 24px 24px">
       <a-breadcrumb style="margin: 16px 0">
@@ -46,7 +38,6 @@
           minHeight: '280px',
         }"
       >
-        <!-- Content -->
         <slot></slot>
       </a-layout-content>
     </a-layout>
@@ -54,8 +45,13 @@
 </template>
   
   <script>
-import { defineComponent } from "vue";
-import { UserOutlined } from "@ant-design/icons-vue";
+import { defineComponent, reactive, ref } from "vue";
+import menuDefaut from "@/constants/menu.js";
+
+import { 
+  UserOutlined,
+ } from "@ant-design/icons-vue";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "main-layout",
@@ -63,9 +59,48 @@ export default defineComponent({
     UserOutlined,
   },
   setup() {
+    const loading = ref(false);
+    const router = useRouter();
+    const menu = ref(menuDefaut);
+    const state = reactive({
+      collapsed: false,
+      selectedKeys: [''],
+      openKeys: [''],
+    });
+
+    const handleClick = (val) => {
+      loading.value = true;
+      if(val.key === "TrangChu"){
+        router.push("/trang-chu")
+        loading.value = false;
+      }
+      if(val.key === "HoSo"){
+        router.push("/ho-so");
+        loading.value = false;
+      }
+      if(val.key === "DangXuat"){
+        sessionStorage.removeItem("Token");
+        sessionStorage.removeItem("Role");
+        sessionStorage.removeItem("userId");
+        sessionStorage.removeItem("Username");
+
+        router.push("/dang-nhap")
+        loading.value = false;
+      }
+
+    }
+
+    const returnToTrangChu = () => {
+      router.push("/trang-chu");
+    }
 
     return {
-      
+      state,
+      menu,
+      loading,
+      router,
+      handleClick,
+      returnToTrangChu
     };
   },
   computed:{
