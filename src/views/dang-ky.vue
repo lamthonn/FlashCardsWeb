@@ -37,6 +37,7 @@ import {
   CheckCircleOutlined,
   ExclamationCircleOutlined 
 } from '@ant-design/icons-vue';
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "dang-ky",
@@ -51,6 +52,7 @@ export default defineComponent({
       matKhau1: null,
       matKhau2: null,
     });
+    const router = useRouter()
     const disabled = computed(() => {
       return !(formState.tenNguoiDung && formState.taiKhoan && formState.matKhau1 && formState.matKhau2);
     });
@@ -99,6 +101,7 @@ export default defineComponent({
             ]
           })
           .then(() => {
+            router.push("/dang-nhap");
             notification.open({
                 message: 'Thông Báo',
                 description:
@@ -106,8 +109,8 @@ export default defineComponent({
                 icon: () => h(CheckCircleOutlined, { style: 'color: #108ee9' }),
             });
           })
-          .catch(()=> {
-            console.log(Response);
+          .catch((err)=> {
+            console.log(err);
             notification.open({
                 message: 'Lỗi',
                 description: "Tài khoản đã tồn tại!!",
@@ -129,6 +132,7 @@ export default defineComponent({
       formState,
       rules,
       disabled,
+      router,
       DangKy,
     };
   },
