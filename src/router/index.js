@@ -6,6 +6,7 @@ const routes = [
     path: '/',
     redirect: '/trang-chu'
   },
+  //authorize
   {
     path: '/dang-nhap',
     name: '/dang-nhap',
@@ -33,6 +34,41 @@ const routes = [
       }
     ]
   },
+  //thư viện
+  {
+    path: '/thu-vien',
+    name: '/thu-vien',
+    meta: {
+      breadcrumb: 'Thư viện' 
+    },
+    children:[
+      {
+        path: '/hoc-phan',
+        name: '/hoc-phan',
+        component: () => import('@/views/thu-vien/hoc-phan/index.vue'),
+        meta: {
+          breadcrumb: 'Học phần' 
+        },
+      },
+      {
+        path: '/tao-hoc-phan',
+        name: '/tao-hoc-phan',
+        component: () => import('@/components/thu-vien/hoc-phan/tao-hoc-phan/index.vue'),
+        meta: {
+          breadcrumb: 'Tạo học phần' 
+        }
+      },
+      {
+        path: '/thu-muc',
+        name: '/thu-muc',
+        component: () => import('@/views/thu-vien/thu-muc/index.vue'),
+        meta: {
+          breadcrumb: 'Học phần' 
+        }
+      }
+    ]
+  },
+  //trang chủ
   {
     path: '/trang-chu',
     name: '/trang-chu',

@@ -10,15 +10,15 @@
       </div>
       <a-form class="form_dang_nhap" :rules="rules">
         <a-form-item :name="['taiKhoan']" label="Tài khoản">
-          <a-input v-model:value="formState.taiKhoan" />
+          <a-input v-model:value="formState.taiKhoan" @keyup.enter="DangNhap"/>
         </a-form-item>
         <a-form-item :name="['matKhau']" label="Mật khẩu">
-          <a-input-password v-model:value="formState.matKhau" />
+          <a-input-password v-model:value="formState.matKhau" @keyup.enter="DangNhap"/>
         </a-form-item>
 
         <div class="btn_dang_nhap">
           <router-link to="/dang-ky">Bạn chưa có tài khoản?</router-link >
-          <a-button type="primary" :disabled="disabled" @click="DangNhap" ghost>Đăng Nhập</a-button>
+          <a-button type="primary" :disabled="disabled" @click="DangNhap"  ghost>Đăng Nhập</a-button>
         </div>
       </a-form>
     </a-card>

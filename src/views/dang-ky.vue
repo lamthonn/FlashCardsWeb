@@ -6,21 +6,21 @@
       </div>
       <a-form class="form_dang_nhap" :rules="rules">
         <a-form-item :name="['tenNguoiDung']" label="Tên người dùng">
-          <a-input v-model:value="formState.tenNguoiDung" />
+          <a-input v-model:value="formState.tenNguoiDung" @keyup.enter="DangKy"/>
         </a-form-item>
         <a-form-item :name="['taiKhoan']" label="Tài khoản">
-          <a-input v-model:value="formState.taiKhoan" />
+          <a-input v-model:value="formState.taiKhoan" @keyup.enter="DangKy"/>
         </a-form-item>
         <a-form-item :name="['matKhau1']" label="Mật khẩu">
-          <a-input-password v-model:value="formState.matKhau1" />
+          <a-input-password v-model:value="formState.matKhau1" @keyup.enter="DangKy"/>
         </a-form-item>
         <a-form-item :name="['matKhau2']" label="Nhập lại mật khẩu">
-          <a-input-password v-model:value="formState.matKhau2" />
+          <a-input-password v-model:value="formState.matKhau2" @keyup.enter="DangKy"/>
         </a-form-item>
 
         <div class="btn_dang_nhap">
           <router-link to="/dang-nhap">Bạn đã có tài khoản?</router-link>
-          <a-button type="primary" :disabled="disabled" @click="DangKy" ghost>Đăng Ký</a-button>
+          <a-button type="primary" :disabled="disabled" @click="DangKy"  ghost>Đăng Ký</a-button>
         </div>
       </a-form>
     </a-card>
@@ -92,7 +92,7 @@ export default defineComponent({
       console.log(formState);
         if(formState.matKhau1 === formState.matKhau2){
           axios.post(apiUrl.DANG_KY,{
-            "id":"",
+            "id":"0",
             "username": formState.taiKhoan,
             "password": formState.matKhau1,
             "ten": formState.tenNguoiDung,
@@ -101,13 +101,13 @@ export default defineComponent({
             ]
           })
           .then(() => {
-            router.push("/dang-nhap");
             notification.open({
-                message: 'Thông Báo',
-                description:
-                  'Đăng ký thành công!!.',
-                icon: () => h(CheckCircleOutlined, { style: 'color: #108ee9' }),
+              message: 'Thông Báo',
+              description:
+              'Đăng ký thành công!!.',
+              icon: () => h(CheckCircleOutlined, { style: 'color: #108ee9' }),
             });
+            router.push("/dang-nhap");
           })
           .catch((err)=> {
             console.log(err);

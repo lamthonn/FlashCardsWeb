@@ -10,7 +10,7 @@ export default createStore({
   mutations: {
     LOGIN(state,data){
       state.token = data;
-      sessionStorage.setItem("Token", JSON.stringify(data))
+      sessionStorage.setItem("Token", data)
     }
   },
   modules: {
