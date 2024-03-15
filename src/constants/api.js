@@ -8,5 +8,6 @@ const apiUrl = {
 
     //User
     GET_USER_BY_ID:`${localPath}/api/User/GetUserbyId`,
+    EDIT_INFOR_USER:`${localPath}/api/User/EditInforUser`,
 }
 export default apiUrl;

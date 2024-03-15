@@ -1,5 +1,6 @@
 <template>
   <HoSo />
+  
 </template>
   
 <script>
