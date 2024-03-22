@@ -10,8 +10,15 @@ const apiUrl = {
 
     //User
     GET_USER_BY_ID:`${localPath}/api/User/GetUserbyId`,
+    EDIT_INFOR_USER:`${localPath}/api/User/EditInforUser`,
 
-    //học phần
-    THEM_HOC_PHAN:`${localPath}/api/HocPhan/ThemHocPhan`
+    //học phần, thẻ học
+    THEM_HOC_PHAN:`${localPath}/api/HocPhan/ThemHocPhan`,
+    GET_ALL_HOC_PHAN:`${localPath}/api/HocPhan/GetAllHocPhan`,
+    GET_THE_HOC:`${localPath}/api/HocPhan/GetTheHocById`,
+
+    //Thư mục
+    GET_ALL_THU_MUC:`${localPath}/api/ThuMuc/GetAllThuMuc`,
+    THEM_THU_MUC:`${localPath}/api/ThuMuc/ThemThuMuc`,
 }
 export default apiUrl;

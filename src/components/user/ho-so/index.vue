@@ -79,23 +79,22 @@
 
 <script>
 import MainLayout from "@/layout/main.vue";
-import { defineComponent, reactive , ref,watch } from "vue";
+import { defineComponent, reactive , ref,watch,h } from "vue";
 import apiUrl from "@/constants/api";
 import axios from "axios";
-import { Modal, FormItem, Input, DatePicker, notification  } from 'ant-design-vue';
+import { notification  } from 'ant-design-vue';
 
 import {  
   EditOutlined,
+  CheckCircleOutlined,
+  ExclamationCircleOutlined
 } from '@ant-design/icons-vue';
 
 export default defineComponent({
     components:{
       MainLayout,
-      AModal: Modal,
-        AFormItem: FormItem,
-        AInput: Input,
-        ADatePicker:DatePicker,
-      EditOutlined
+      EditOutlined,
+      ExclamationCircleOutlined
     },
     setup(){
       const informationUser = reactive({
@@ -146,23 +145,22 @@ export default defineComponent({
       const SuaThongTinUser = async () => {
             const token = sessionStorage.getItem('Token');
             const id = sessionStorage.getItem('userId');
-            console.log("id:",`${apiUrl.EDIT_INFOR_USER}?id=${id}`)
             await axios.put(`${apiUrl.EDIT_INFOR_USER}?id=${id}`,{
                   id:"0",
-                  tenNguoiDung: informationUser.tenNguoiDung,
-                  diaChi: informationUser.diaChi,
+                  username: informationUser.username,
                   email: informationUser.email,
-                  gioiTinh: informationUser.gioiTinh,
+                  ten: informationUser.tenNguoiDung,
                   ngaySinh: informationUser.ngaySinh,
-                  sdt: informationUser.sdt,
+                  gioiTinh: informationUser.gioiTinh,
+                  diaChi: informationUser.diaChi,
+                  soDienThoai: informationUser.sdt,
             })  
             .then(res => {
+              console.log("hihi");
                 notification.open({
                       message: 'Thông báo',
                       description:'Sửa thông tin thành công',
-                      onClick: () => {
-                        console.log('Notification Clicked!');
-                      },
+                      icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
                     });
                 visible.value = false;
             })
@@ -171,9 +169,7 @@ export default defineComponent({
                 notification.open({
                       message: 'Thông báo',
                       description:'Sửa thông tin không thành công',
-                      onClick: () => {
-                        console.log('Notification Clicked!');
-                      },
+                      icon: () => h(ExclamationCircleOutlined, { style: "color: #108ee9" }),
                     });
             })
         }

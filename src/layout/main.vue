@@ -42,7 +42,7 @@
           </div>
         </template>
         <a-card-meta :title="formState.tenNguoiDung">
-          <template #description>{{ formState.username }}</template>
+          <template #description>{{ formState.username || formState.email }}</template>
         </a-card-meta>
       </a-card>
       <a-menu
@@ -79,22 +79,34 @@
 </template>
   
   <script>
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref,h } from "vue";
 import menuDefaut from "@/constants/menu.js";
 import { 
   UserOutlined,
   SearchOutlined ,
-  BellOutlined 
+  BellOutlined ,
+  CheckCircleOutlined,
+  ExclamationCircleOutlined
  } from "@ant-design/icons-vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import apiUrl from "@/constants/api";
+import firebaseConfig from '@/constants/firebaseConfig'
+import { getAuth, FacebookAuthProvider, signOut} from 'firebase/auth';
+firebaseConfig
+const provider = new FacebookAuthProvider();
+const auth = getAuth();
+import { notification } from "ant-design-vue";
+
+
 export default defineComponent({
   name: "main-layout",
   components: {
     UserOutlined,
     SearchOutlined ,
-    BellOutlined 
+    BellOutlined ,
+    CheckCircleOutlined,
+    ExclamationCircleOutlined
   },
   setup() {
     const loading = ref(false);
@@ -136,6 +148,7 @@ export default defineComponent({
         sessionStorage.removeItem("Role");
         sessionStorage.removeItem("userId");
         sessionStorage.removeItem("Username");
+        signOut(auth);
 
         router.push("/dang-nhap")
         loading.value = false;
@@ -149,18 +162,45 @@ export default defineComponent({
 
     const getUserById = async (id) => {
       const token = sessionStorage.getItem('Token');
+      //const isValidToken = await validateAccessToken(token);
+      // if (!isValidToken) {
+      //   notification.open({
+      //       message: 'Lỗi',
+      //       description: "Invalid access token!!",
+      //       icon: () => h(ExclamationCircleOutlined , { style: 'color: red' }),
+      //   });
+      //   // Xử lý khi token không hợp lệ, ví dụ như đăng nhập lại hoặc hiển thị thông báo lỗi
+      //   return;
+      // }
+
       await axios.get(`${apiUrl.GET_USER_BY_ID}?id=${id}`,{
         headers: {
           'Authorization': `Bearer ${token}`
         }
       })
         .then( res => {
+          console.log(res.data);
           formState.tenNguoiDung = res.data.ten;
           formState.username = res.data.username;
+          formState.email = res.data.email;
         })
         .catch(err => {
           console.log(err);
         })
+    }
+
+    const validateAccessToken = async (token) => {
+      try {
+        const response = await axios.post(apiUrl.CHECK_TOKEN_FACEBOOK, {
+          accessToken: token
+        });
+        console.log('token:',response.data.isValid);
+
+        return response.data.isValid;
+      } catch (error) {
+        console.error('Error validating access token:', error);
+        return false;
+      }
     }
 
     return {
@@ -171,7 +211,8 @@ export default defineComponent({
       formState,
       handleClick,
       returnToTrangChu,
-      getUserById
+      getUserById,
+      validateAccessToken
     };
   },
   computed:{
