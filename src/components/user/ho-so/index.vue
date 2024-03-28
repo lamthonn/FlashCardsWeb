@@ -79,6 +79,7 @@
 
 <script>
 import MainLayout from "@/layout/main.vue";
+<<<<<<< HEAD
 import { defineComponent, reactive , ref,watch } from "vue";
 import apiUrl from "@/constants/api";
 import axios from "axios";
@@ -86,16 +87,32 @@ import { Modal, FormItem, Input, DatePicker, notification  } from 'ant-design-vu
 
 import {  
   EditOutlined,
+=======
+import { defineComponent, reactive , ref,watch,h } from "vue";
+import apiUrl from "@/constants/api";
+import axios from "axios";
+import { notification  } from 'ant-design-vue';
+
+import {  
+  EditOutlined,
+  CheckCircleOutlined,
+  ExclamationCircleOutlined
+>>>>>>> 9258527a1a277af29cf9f6a78cb2df5cb1d62c16
 } from '@ant-design/icons-vue';
 
 export default defineComponent({
     components:{
       MainLayout,
+<<<<<<< HEAD
       AModal: Modal,
         AFormItem: FormItem,
         AInput: Input,
         ADatePicker:DatePicker,
       EditOutlined
+=======
+      EditOutlined,
+      ExclamationCircleOutlined
+>>>>>>> 9258527a1a277af29cf9f6a78cb2df5cb1d62c16
     },
     setup(){
       const informationUser = reactive({
@@ -146,6 +163,7 @@ export default defineComponent({
       const SuaThongTinUser = async () => {
             const token = sessionStorage.getItem('Token');
             const id = sessionStorage.getItem('userId');
+<<<<<<< HEAD
             console.log("id:",`${apiUrl.EDIT_INFOR_USER}?id=${id}`)
             await axios.put(`${apiUrl.EDIT_INFOR_USER}?id=${id}`,{
                   id:"0",
@@ -163,6 +181,24 @@ export default defineComponent({
                       onClick: () => {
                         console.log('Notification Clicked!');
                       },
+=======
+            await axios.put(`${apiUrl.EDIT_INFOR_USER}?id=${id}`,{
+                  id:"0",
+                  username: informationUser.username,
+                  email: informationUser.email,
+                  ten: informationUser.tenNguoiDung,
+                  ngaySinh: informationUser.ngaySinh,
+                  gioiTinh: informationUser.gioiTinh,
+                  diaChi: informationUser.diaChi,
+                  soDienThoai: informationUser.sdt,
+            })  
+            .then(res => {
+              console.log("hihi");
+                notification.open({
+                      message: 'Thông báo',
+                      description:'Sửa thông tin thành công',
+                      icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
+>>>>>>> 9258527a1a277af29cf9f6a78cb2df5cb1d62c16
                     });
                 visible.value = false;
             })
@@ -171,9 +207,13 @@ export default defineComponent({
                 notification.open({
                       message: 'Thông báo',
                       description:'Sửa thông tin không thành công',
+<<<<<<< HEAD
                       onClick: () => {
                         console.log('Notification Clicked!');
                       },
+=======
+                      icon: () => h(ExclamationCircleOutlined, { style: "color: #108ee9" }),
+>>>>>>> 9258527a1a277af29cf9f6a78cb2df5cb1d62c16
                     });
             })
         }

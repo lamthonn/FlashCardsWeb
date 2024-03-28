@@ -1,6 +1,6 @@
 <template>
   <div class="wrap" style="background: #ececec; padding: 30px">
-    <a-card title="Đăng Ký" :bordered="false" style="width: 100vh">
+    <a-card title="Đăng Ký" :bordered="false" style="width: 100vh" :loading="loading">
       <div class="logo">
         <h1>VocaLearn</h1>
       </div>
@@ -29,7 +29,7 @@
   
   <script>
 import apiUrl from "@/constants/api";
-import { h } from "vue";
+import { h, ref } from "vue";
 import { computed, defineComponent, reactive } from "vue";
 import axios from "axios";
 import { notification } from "ant-design-vue";
@@ -46,6 +46,7 @@ export default defineComponent({
     ExclamationCircleOutlined 
   },
   setup() {
+    const loading = ref(false);
     const formState = reactive({
       tenNguoiDung: null,
       taiKhoan: null,
@@ -89,7 +90,7 @@ export default defineComponent({
     };
 
     const DangKy =() => {
-      console.log(formState);
+      loading.value = true;
         if(formState.matKhau1 === formState.matKhau2){
           axios.post(apiUrl.DANG_KY,{
             "id":"0",
@@ -108,6 +109,7 @@ export default defineComponent({
               icon: () => h(CheckCircleOutlined, { style: 'color: #108ee9' }),
             });
             router.push("/dang-nhap");
+            loading.value = false;
           })
           .catch((err)=> {
             console.log(err);
@@ -116,6 +118,7 @@ export default defineComponent({
                 description: "Tài khoản đã tồn tại!!",
                 icon: () => h(ExclamationCircleOutlined , { style: 'color: red' }),
             })
+            loading.value = false;
           })
         }
         else{
@@ -133,6 +136,7 @@ export default defineComponent({
       rules,
       disabled,
       router,
+      loading,
       DangKy,
     };
   },

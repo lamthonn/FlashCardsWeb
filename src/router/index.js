@@ -49,6 +49,17 @@ const routes = [
         meta: {
           breadcrumb: 'Học phần' 
         },
+        props: true,
+        
+      },
+      {
+        path: '/chi-tiet-hoc-phan',
+        name: '/chi-tiet-hoc-phan',
+        component: () => import('@/components/thu-vien/hoc-phan/chi-tiet-hoc-phan/chi-tiet.vue'),
+        meta: {
+          breadcrumb: 'Chi tiết học phần' 
+        },
+        props: true,
       },
       {
         path: '/tao-hoc-phan',
@@ -56,7 +67,8 @@ const routes = [
         component: () => import('@/components/thu-vien/hoc-phan/tao-hoc-phan/index.vue'),
         meta: {
           breadcrumb: 'Tạo học phần' 
-        }
+        },
+        props: true
       },
       {
         path: '/thu-muc',
@@ -64,7 +76,8 @@ const routes = [
         component: () => import('@/views/thu-vien/thu-muc/index.vue'),
         meta: {
           breadcrumb: 'Học phần' 
-        }
+        },
+        props: true
       }
     ]
   },

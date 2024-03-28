@@ -34,47 +34,23 @@
                 </a-col>
             </a-row>
 
-
-            <a-row style="margin-top:1.5rem;">
-                <div style="width: 100%">
-                    <a-card >
+            <a-row style="margin-top:1.5rem;"  v-for="hocphan in ListHocPhan" :key="hocphan.id">
+                <div style="width: 100%" >
+                    <a-card class="HocPhan" @click="JoinHocPhan(hocphan.id)">
                         <a-row>
                             <a-col :span="19">
                                 <a-row>
-                                    <a-col :span="3"> 12 thẻ học</a-col>
+                                    <a-col :span="3"> {{ hocphan.soTheHoc }} thẻ học</a-col>
                                     <a-col :span="3" style="display: flex; align-items:center; ">
                                         <a-avatar size="small" style="margin-right: 5px;" src="https://cdn4.iconfinder.com/data/icons/profession-avatar-5/64/29-programmer-512.png"/>  
-                                        lamvu123
+                                        {{ Username }}
                                     </a-col>
                                 </a-row>
-                                <h1 class="titleCard">Lesson 4: Business Planning</h1>
+                                <h1 class="titleCard">{{ hocphan.tieuDe }}</h1>
                             </a-col>
                             <a-col :span="5" style="color: grey;">
                                 <p>Ngày tạo:</p>
-                                <p>03/03/2024</p>
-                            </a-col>
-                        </a-row>
-                    </a-card>
-                </div>
-            </a-row>
-
-            <a-row style="margin-top:1.5rem;">
-                <div style="width: 100%">
-                    <a-card >
-                        <a-row>
-                            <a-col :span="19">
-                                <a-row>
-                                    <a-col :span="3"> 12 thẻ học</a-col>
-                                    <a-col :span="3" style="display: flex; align-items:center; ">
-                                        <a-avatar size="small" style="margin-right: 5px;" src="https://cdn4.iconfinder.com/data/icons/profession-avatar-5/64/29-programmer-512.png"/>  
-                                        lamvu123
-                                    </a-col>
-                                </a-row>
-                                <h1 class="titleCard">Lesson 4: Business Planning</h1>
-                            </a-col>
-                            <a-col :span="5" style="color: grey;">
-                                <p>Ngày tạo:</p>
-                                <p>03/03/2024</p>
+                                <p>{{ hocphan.ngayTao.slice(0,10) }}</p>
                             </a-col>
                         </a-row>
                     </a-card>
@@ -93,6 +69,8 @@ import {
     SearchOutlined,
     PlusOutlined 
 } from '@ant-design/icons-vue';
+import apiUrl from "@/constants/api";
+import axios from "axios";
  
 
 export default defineComponent({
@@ -105,6 +83,9 @@ export default defineComponent({
     setup(){
         const router = useRouter();
         const loading = ref(false);
+        const ListHocPhan = ref([]);
+        const ThuMucId = ref('');
+        const Username = ref('');
         const fromState = reactive({
             keySearch:null,
             trangthai:"Gần đây"
@@ -115,12 +96,51 @@ export default defineComponent({
             loading.value = false;
         }
 
+        
+
+        const GetHocPhan =async () => {
+            var token = sessionStorage.getItem("Token")
+            //get username
+            await axios.get(apiUrl.GET_ALL_HOC_PHAN)
+            .then(async (res) => {
+                ListHocPhan.value = res.data
+                console.log(res.data);
+                await axios.get(`${apiUrl.GET_USER_BY_ID}?id=${res.data[0].userId}`,{
+                    headers: {
+                    'Authorization': `Bearer ${token}`
+                    }
+                })
+                .then(res => {
+                    Username.value = res.data.username;
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        }
+
+        const JoinHocPhan = (id) => {
+            router.push(`/chi-tiet-hoc-phan?id=${id}`)
+        }
+
         return{
             fromState,
             loading,
             router,
+            ListHocPhan,
+            ThuMucId,
+            Username,
             TaoHocPhan,
+            GetHocPhan,
+            JoinHocPhan
         }
+    },
+    mounted(){
+        this.ThuMucId = this.router.currentRoute.value.query.id;
+        this.GetHocPhan();
     }
 })
 </script>
@@ -131,5 +151,12 @@ export default defineComponent({
         display: flex;
         margin: 0;
         margin-top: 7px;
+    }
+
+    .HocPhan{
+        cursor: pointer;
+    }
+    .HocPhan:active {
+        background-color: #f4f4f4;
     }
 </style>
