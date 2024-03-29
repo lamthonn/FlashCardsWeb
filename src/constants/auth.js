@@ -6,8 +6,7 @@ const checkTokenExpiration = () => {
         const data = jwtDecode(token);
         const tokenExpirationTime = data.exp * 1000;
         const currentTime = new Date().getTime();
-        console.log(tokenExpirationTime);
-        console.log(currentTime);
+        
         if(currentTime >= tokenExpirationTime){
             sessionStorage.removeItem("Token");
             sessionStorage.removeItem("Role");
