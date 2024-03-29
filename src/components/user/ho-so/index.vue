@@ -79,6 +79,15 @@
 
 <script>
 import MainLayout from "@/layout/main.vue";
+<<<<<<< HEAD
+import { defineComponent, reactive , ref,watch } from "vue";
+import apiUrl from "@/constants/api";
+import axios from "axios";
+import { Modal, FormItem, Input, DatePicker, notification  } from 'ant-design-vue';
+
+import {  
+  EditOutlined,
+=======
 import { defineComponent, reactive , ref,watch,h } from "vue";
 import apiUrl from "@/constants/api";
 import axios from "axios";
@@ -88,13 +97,22 @@ import {
   EditOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined
+>>>>>>> 9258527a1a277af29cf9f6a78cb2df5cb1d62c16
 } from '@ant-design/icons-vue';
 
 export default defineComponent({
     components:{
       MainLayout,
+<<<<<<< HEAD
+      AModal: Modal,
+        AFormItem: FormItem,
+        AInput: Input,
+        ADatePicker:DatePicker,
+      EditOutlined
+=======
       EditOutlined,
       ExclamationCircleOutlined
+>>>>>>> 9258527a1a277af29cf9f6a78cb2df5cb1d62c16
     },
     setup(){
       const informationUser = reactive({
@@ -145,6 +163,25 @@ export default defineComponent({
       const SuaThongTinUser = async () => {
             const token = sessionStorage.getItem('Token');
             const id = sessionStorage.getItem('userId');
+<<<<<<< HEAD
+            console.log("id:",`${apiUrl.EDIT_INFOR_USER}?id=${id}`)
+            await axios.put(`${apiUrl.EDIT_INFOR_USER}?id=${id}`,{
+                  id:"0",
+                  tenNguoiDung: informationUser.tenNguoiDung,
+                  diaChi: informationUser.diaChi,
+                  email: informationUser.email,
+                  gioiTinh: informationUser.gioiTinh,
+                  ngaySinh: informationUser.ngaySinh,
+                  sdt: informationUser.sdt,
+            })  
+            .then(res => {
+                notification.open({
+                      message: 'Thông báo',
+                      description:'Sửa thông tin thành công',
+                      onClick: () => {
+                        console.log('Notification Clicked!');
+                      },
+=======
             await axios.put(`${apiUrl.EDIT_INFOR_USER}?id=${id}`,{
                   id:"0",
                   username: informationUser.username,
@@ -161,6 +198,7 @@ export default defineComponent({
                       message: 'Thông báo',
                       description:'Sửa thông tin thành công',
                       icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
+>>>>>>> 9258527a1a277af29cf9f6a78cb2df5cb1d62c16
                     });
                 visible.value = false;
             })
@@ -169,7 +207,13 @@ export default defineComponent({
                 notification.open({
                       message: 'Thông báo',
                       description:'Sửa thông tin không thành công',
+<<<<<<< HEAD
+                      onClick: () => {
+                        console.log('Notification Clicked!');
+                      },
+=======
                       icon: () => h(ExclamationCircleOutlined, { style: "color: #108ee9" }),
+>>>>>>> 9258527a1a277af29cf9f6a78cb2df5cb1d62c16
                     });
             })
         }

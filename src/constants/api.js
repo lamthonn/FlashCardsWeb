@@ -11,6 +11,8 @@ const apiUrl = {
     //User
     GET_USER_BY_ID:`${localPath}/api/User/GetUserbyId`,
     EDIT_INFOR_USER:`${localPath}/api/User/EditInforUser`,
+<<<<<<< HEAD
+=======
 
     //học phần, thẻ học
     THEM_HOC_PHAN:`${localPath}/api/HocPhan/ThemHocPhan`,
@@ -20,5 +22,6 @@ const apiUrl = {
     //Thư mục
     GET_ALL_THU_MUC:`${localPath}/api/ThuMuc/GetAllThuMuc`,
     THEM_THU_MUC:`${localPath}/api/ThuMuc/ThemThuMuc`,
+>>>>>>> 9258527a1a277af29cf9f6a78cb2df5cb1d62c16
 }
 export default apiUrl;
