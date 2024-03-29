@@ -1,43 +1,76 @@
 <template>
-  <MainLayout >
+  <MainLayout>
     <a-row>
       <a-col :flex="1">
-        <div class="image-user" style="display: flex; justify-content: center;">
-          <a-image  :width="300" :style="{ borderRadius: '50%'}" src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
+        <div class="image-user" style="display: flex; justify-content: center">
+          <a-image
+            :width="300"
+            :style="{ borderRadius: '50%' }"
+            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+          />
         </div>
-        
-        <div style=" justify-content: center;" class="information-user">
-          <a-space style="display: flex;justify-content: center; ">
-            <a-button type="primary" title="Sửa thông tin người dùng" :centered="true" @click="showModal"><EditOutlined />Sửa trang cá nhân</a-button>   
-          </a-space>    
-          <ul class="content-infor-user" style="list-style-type: none; margin-top:1rem">
-            <li style="display: flex;">
-              <p class="titleInforUser userName" style="width: 30%;">Username:</p>
-              <p class="contentInforUser userName">{{ informationUser.username }}</p>
+
+        <div style="justify-content: center" class="information-user">
+          <a-space style="display: flex; justify-content: center">
+            <a-button
+              type="primary"
+              title="Sửa thông tin người dùng"
+              :centered="true"
+              @click="showModal"
+              ><EditOutlined />Sửa trang cá nhân</a-button
+            >
+          </a-space>
+          <ul
+            class="content-infor-user"
+            style="list-style-type: none; margin-top: 1rem"
+          >
+            <li style="display: flex">
+              <p class="titleInforUser userName" style="width: 30%">
+                Username:
+              </p>
+              <p class="contentInforUser userName">
+                {{ informationUser.username }}
+              </p>
             </li>
-            <li style="display: flex;">
-              <p class="titleInforUser tenNguoiDung" style="width: 30%;">Tên người dùng:</p>
-              <p class="contentInforUser tenNguoiDung">{{ informationUser.tenNguoiDung }}</p>
+            <li style="display: flex">
+              <p class="titleInforUser tenNguoiDung" style="width: 30%">
+                Tên người dùng:
+              </p>
+              <p class="contentInforUser tenNguoiDung">
+                {{ informationUser.tenNguoiDung }}
+              </p>
             </li>
-            <li style="display: flex;">
-              <p class="titleInforUser email" style="width: 30%;">Email:</p>
+            <li style="display: flex">
+              <p class="titleInforUser email" style="width: 30%">Email:</p>
               <p class="contentInforUser email">{{ informationUser.email }}</p>
             </li>
-            <li style="display: flex;">
-              <p class="titleInforUser diaChi" style="width: 30%;">Địa chỉ:</p>
-              <p class="contentInforUser diaChi">{{ informationUser.diaChi }}</p>
+            <li style="display: flex">
+              <p class="titleInforUser diaChi" style="width: 30%">Địa chỉ:</p>
+              <p class="contentInforUser diaChi">
+                {{ informationUser.diaChi }}
+              </p>
             </li>
-            
-            <li style="display: flex;">
-              <p class="titleInforUser gioiTinh" style="width: 30%;">Giới tính:</p>
-              <p class="contentInforUser gioiTinh">{{ informationUser.gioiTinh }}</p>
+
+            <li style="display: flex">
+              <p class="titleInforUser gioiTinh" style="width: 30%">
+                Giới tính:
+              </p>
+              <p class="contentInforUser gioiTinh">
+                {{ informationUser.gioiTinh }}
+              </p>
             </li>
-            <li style="display: flex;">
-              <p class="titleInforUser ngaySinh " style="width: 30%;">Ngày sinh:</p>
-              <p class="contentInforUser ngaySinh">{{ informationUser.ngaySinh }}</p>
+            <li style="display: flex">
+              <p class="titleInforUser ngaySinh" style="width: 30%">
+                Ngày sinh:
+              </p>
+              <p class="contentInforUser ngaySinh">
+                {{ informationUser.ngaySinh }}
+              </p>
             </li>
-            <li style="display: flex;">
-              <p class="titleInforUser ngaySinh" style="width: 30%;">Số điện thoại:</p>
+            <li style="display: flex">
+              <p class="titleInforUser ngaySinh" style="width: 30%">
+                Số điện thoại:
+              </p>
               <p class="contentInforUser ngaySinh">{{ informationUser.sdt }}</p>
             </li>
           </ul>
@@ -45,74 +78,88 @@
       </a-col>
       <a-col :flex="4">3 / 5</a-col>
     </a-row>
-    <a-modal v-model:open="visible" width="40%" title="Sửa thông tin người dùng" :centered="true" @ok="checkAndEditUser" class="editInforUser">
-    <div>
+    <a-modal
+      v-model:open="visible"
+      width="40%"
+      title="Sửa thông tin người dùng"
+      :centered="true"
+      @ok="checkAndEditUser"
+      class="editInforUser"
+    >
+      <div>
         <a-form-item>
-            <a-input addonBefore="Họ và tên" v-model:value="informationUser.tenNguoiDung" placeholder="Họ và tên" allow-clear />
+          <a-input
+            addonBefore="Họ và tên"
+            v-model:value="informationUser.tenNguoiDung"
+            placeholder="Họ và tên"
+            allow-clear
+          />
         </a-form-item>
         <a-form-item>
-            <a-input addonBefore="Địa chỉ" v-model:value="informationUser.diaChi" placeholder="Địa chỉ" allow-clear />
+          <a-input
+            addonBefore="Địa chỉ"
+            v-model:value="informationUser.diaChi"
+            placeholder="Địa chỉ"
+            allow-clear
+          />
         </a-form-item>
         <a-form-item>
-            <a-input addonBefore="Email" v-model:value="informationUser.email" placeholder="Email" allow-clear />
+          <a-input
+            addonBefore="Email"
+            v-model:value="informationUser.email"
+            placeholder="Email"
+            allow-clear
+          />
         </a-form-item>
         <a-form-item>
-            <p>Giới tính:</p>
-            <a-radio-group v-model:value="informationUser.gioiTinh">
-                <a-radio value="Nam">Nam</a-radio>
-                <a-radio value="Nữ">Nữ</a-radio>
-            </a-radio-group>
+          <p>Giới tính:</p>
+          <a-radio-group v-model:value="informationUser.gioiTinh">
+            <a-radio value="Nam">Nam</a-radio>
+            <a-radio value="Nữ">Nữ</a-radio>
+          </a-radio-group>
         </a-form-item>
         <a-form-item>
-            <a-input addonBefore="Ngày sinh" v-model:value="informationUser.ngaySinh" placeholder="Ngày sinh" allow-clear />
-        </a-form-item>           
-        <a-form-item>
-            <a-input addonBefore="Số điện thoại" v-model:value="informationUser.sdt" placeholder="Số điện thoại" allow-clear />
+          <a-input
+            addonBefore="Ngày sinh"
+            v-model:value="informationUser.ngaySinh"
+            placeholder="Ngày sinh"
+            allow-clear
+          />
         </a-form-item>
-    </div>
-</a-modal>
-
-    
-
+        <a-form-item>
+          <a-input
+            addonBefore="Số điện thoại"
+            v-model:value="informationUser.sdt"
+            placeholder="Số điện thoại"
+            allow-clear
+          />
+        </a-form-item>
+      </div>
+    </a-modal>
   </MainLayout>
 </template>
 
 <script>
 import MainLayout from "@/layout/main.vue";
-<<<<<<< HEAD
-import { defineComponent, reactive , ref,watch } from "vue";
-import apiUrl from "@/constants/api";
-import axios from "axios";
-import { Modal, FormItem, Input, DatePicker, notification  } from 'ant-design-vue';
-
-import {  
-  EditOutlined,
-=======
 import { defineComponent, reactive , ref,watch,h } from "vue";
 import apiUrl from "@/constants/api";
 import axios from "axios";
 import { notification  } from 'ant-design-vue';
-
 import {  
   EditOutlined,
   CheckCircleOutlined,
   ExclamationCircleOutlined
->>>>>>> 9258527a1a277af29cf9f6a78cb2df5cb1d62c16
 } from '@ant-design/icons-vue';
 
 export default defineComponent({
     components:{
       MainLayout,
-<<<<<<< HEAD
       AModal: Modal,
-        AFormItem: FormItem,
-        AInput: Input,
-        ADatePicker:DatePicker,
-      EditOutlined
-=======
+      AFormItem: FormItem,
+      AInput: Input,
+      ADatePicker:DatePicker,
       EditOutlined,
       ExclamationCircleOutlined
->>>>>>> 9258527a1a277af29cf9f6a78cb2df5cb1d62c16
     },
     setup(){
       const informationUser = reactive({
@@ -163,25 +210,6 @@ export default defineComponent({
       const SuaThongTinUser = async () => {
             const token = sessionStorage.getItem('Token');
             const id = sessionStorage.getItem('userId');
-<<<<<<< HEAD
-            console.log("id:",`${apiUrl.EDIT_INFOR_USER}?id=${id}`)
-            await axios.put(`${apiUrl.EDIT_INFOR_USER}?id=${id}`,{
-                  id:"0",
-                  tenNguoiDung: informationUser.tenNguoiDung,
-                  diaChi: informationUser.diaChi,
-                  email: informationUser.email,
-                  gioiTinh: informationUser.gioiTinh,
-                  ngaySinh: informationUser.ngaySinh,
-                  sdt: informationUser.sdt,
-            })  
-            .then(res => {
-                notification.open({
-                      message: 'Thông báo',
-                      description:'Sửa thông tin thành công',
-                      onClick: () => {
-                        console.log('Notification Clicked!');
-                      },
-=======
             await axios.put(`${apiUrl.EDIT_INFOR_USER}?id=${id}`,{
                   id:"0",
                   username: informationUser.username,
@@ -198,7 +226,6 @@ export default defineComponent({
                       message: 'Thông báo',
                       description:'Sửa thông tin thành công',
                       icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
->>>>>>> 9258527a1a277af29cf9f6a78cb2df5cb1d62c16
                     });
                 visible.value = false;
             })
@@ -207,13 +234,7 @@ export default defineComponent({
                 notification.open({
                       message: 'Thông báo',
                       description:'Sửa thông tin không thành công',
-<<<<<<< HEAD
-                      onClick: () => {
-                        console.log('Notification Clicked!');
-                      },
-=======
                       icon: () => h(ExclamationCircleOutlined, { style: "color: #108ee9" }),
->>>>>>> 9258527a1a277af29cf9f6a78cb2df5cb1d62c16
                     });
             })
         }
