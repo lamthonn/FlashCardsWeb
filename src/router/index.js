@@ -12,6 +12,7 @@ const routes = [
     name: '/dang-nhap',
     component: dangNhap
   },
+  //đăng ký
   {
     path: '/dang-ky',
     name: '/dang-ky',
@@ -62,6 +63,25 @@ const routes = [
         props: true,
       },
       {
+        path: '/match-game',
+        name: '/match-game',
+        component: () => import('@/components/thu-vien/hoc-phan/games/match-game/match-game.vue'),
+        meta: {
+          breadcrumb: 'Ghép thẻ' 
+        },
+        props: true,
+        
+      },
+      {
+        path: '/sua-hoc-phan',
+        name: '/sua-hoc-phan',
+        component: () => import('@/components/thu-vien/hoc-phan/sua-hoc-phan/chi-tiet.vue'),
+        meta: {
+          breadcrumb: 'Sửa học phần' 
+        },
+        props: true,
+      },
+      {
         path: '/tao-hoc-phan',
         name: '/tao-hoc-phan',
         component: () => import('@/components/thu-vien/hoc-phan/tao-hoc-phan/index.vue'),
@@ -89,7 +109,23 @@ const routes = [
     meta: {
       breadcrumb: 'Trang chủ' // Định nghĩa breadcrumb cho route này
     }
-  }
+  },
+
+
+  //ADMIN
+  {
+    path: '/admin',
+    name: '/admin',
+    component: () => import('@/views_admin/trang-chu/index.vue'),
+  },
+  {
+    path: '/quan-ly-nguoi-dung',
+    name: '/quan-ly-nguoi-dung',
+    meta: {
+      breadcrumb: 'Quản lý người dùng' 
+    },
+    component: () => import('@/views_admin/quan-ly-nguoi-dung/index.vue'),
+  },
 ]
 
 const router = createRouter({

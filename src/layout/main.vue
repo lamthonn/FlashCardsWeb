@@ -37,7 +37,7 @@
       <a-card style="text-align:center;">
         <template #cover >
           <div style="text-align:center; margin-top:1rem;">
-            <a-avatar :size="64" src="https://cdn4.iconfinder.com/data/icons/profession-avatar-5/64/29-programmer-512.png">
+            <a-avatar :size="64" :src="link ? link : 'https://cdn4.iconfinder.com/data/icons/profession-avatar-5/64/29-programmer-512.png'">
             </a-avatar>
           </div>
         </template>
@@ -73,7 +73,11 @@
         }"
       >
         <slot></slot>
+        
       </a-layout-content>
+      <a-layout-footer style="text-align: center">
+        Voca Learn ©2024 Created by Lam Vu, Dinh Hai
+      </a-layout-footer>
     </a-layout>
   </a-layout>
 </template>
@@ -81,6 +85,7 @@
   <script>
 import { defineComponent, reactive, ref,h } from "vue";
 import menuDefaut from "@/constants/menu.js";
+import menuAdminDefaut from "@/constants/menuAdmin";
 import { 
   UserOutlined,
   SearchOutlined ,
@@ -109,9 +114,11 @@ export default defineComponent({
     ExclamationCircleOutlined
   },
   setup() {
+    const link = ref("");
+    const role = ref('');
     const loading = ref(false);
     const router = useRouter();
-    const menu = ref(menuDefaut);
+    const menu = ref([]);
     const state = reactive({
       collapsed: false,
       selectedKeys: [''],
@@ -132,6 +139,10 @@ export default defineComponent({
       }
       if(val.key === "HoSo"){
         router.push("/ho-so");
+        loading.value = false;
+      }
+      if(val.key === "QuanLyUser"){
+        router.push("/quan-ly-nguoi-dung");
         loading.value = false;
       }
       if(val.key === "HocPhan"){
@@ -162,16 +173,6 @@ export default defineComponent({
 
     const getUserById = async (id) => {
       const token = sessionStorage.getItem('Token');
-      //const isValidToken = await validateAccessToken(token);
-      // if (!isValidToken) {
-      //   notification.open({
-      //       message: 'Lỗi',
-      //       description: "Invalid access token!!",
-      //       icon: () => h(ExclamationCircleOutlined , { style: 'color: red' }),
-      //   });
-      //   // Xử lý khi token không hợp lệ, ví dụ như đăng nhập lại hoặc hiển thị thông báo lỗi
-      //   return;
-      // }
 
       await axios.get(`${apiUrl.GET_USER_BY_ID}?id=${id}`,{
         headers: {
@@ -179,13 +180,16 @@ export default defineComponent({
         }
       })
         .then( res => {
-          console.log(res.data);
           formState.tenNguoiDung = res.data.ten;
           formState.username = res.data.username;
           formState.email = res.data.email;
         })
         .catch(err => {
-          console.log(err);
+          notification.open({
+              message: "Lỗi",
+              description: "Có lỗi xảy ra!",
+              icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+          });
         })
     }
 
@@ -194,7 +198,6 @@ export default defineComponent({
         const response = await axios.post(apiUrl.CHECK_TOKEN_FACEBOOK, {
           accessToken: token
         });
-        console.log('token:',response.data.isValid);
 
         return response.data.isValid;
       } catch (error) {
@@ -203,16 +206,53 @@ export default defineComponent({
       }
     }
 
+    const getAvt = () => {
+      const userId = sessionStorage.getItem("userId");
+      if(role.value === "User")
+      {
+        axios.get(`${apiUrl.GET_AVATAR}?id=${userId}`, { responseType: 'blob' })
+        .then(resa => {
+          var url = URL.createObjectURL(resa.data);
+          link.value = url;
+        })
+        .catch(er => {
+          notification.open({
+              message: "Lỗi",
+              description: "Có lỗi xảy ra!",
+              icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+          });
+        })
+      }
+    }
+
+    const getRole = () => {
+      role.value = sessionStorage.getItem('Role')
+    }
+
+    const getMenu = async () => {
+      if(role.value === "User"){
+        menu.value = menuDefaut;
+      }
+      if(role.value === "Admin")
+      {
+        menu.value = menuAdminDefaut;
+      }
+    }
     return {
       state,
       menu,
       loading,
       router,
+      link,
+      role,
       formState,
       handleClick,
       returnToTrangChu,
       getUserById,
-      validateAccessToken
+      validateAccessToken,
+      getAvt,
+      getRole,
+      getMenu
     };
   },
   computed:{
@@ -226,7 +266,9 @@ export default defineComponent({
   mounted(){
     const UserId = sessionStorage.getItem("userId");
     this.getUserById(UserId);
-
+    this.getAvt();
+    this.getRole();
+    this.getMenu();
   }
 });
 </script>

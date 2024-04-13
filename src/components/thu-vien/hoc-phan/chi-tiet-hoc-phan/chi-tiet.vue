@@ -3,13 +3,24 @@
     <a-card
         class="itemSlice"
         style="width:100%; padding:0;"
-        title="Tiêu đề test"
+        :title="'HỌC PHẦN: ' + hocPhanData.tieuDe"
     >
+    <template #extra>
+      <a-dropdown-button>
+        <!-- <SmallDashOutlined /> -->
+        <template #overlay>
+          <a-menu >
+            <a-menu-item @click="deleteHocPhan(hocPhanData.id)"><DeleteOutlined /> Xóa học phần</a-menu-item>
+            <a-menu-item @click="editHocPhan(hocPhanData.id)"><EditOutlined /> Sửa học phần</a-menu-item>
+          </a-menu>
+        </template>
+      </a-dropdown-button>
+    </template>
     <a-row :gutter="24" style="width:80%; margin-left:10%;margin-bottom:15px; display: flex; justify-content: space-between;">
-        <a-button type="primary" class="btn-options"><CopyOutlined/> FlashCards</a-button>
+        <!-- <a-button type="primary" class="btn-options"><CopyOutlined/> FlashCards</a-button> -->
         <a-button type="primary" class="btn-options"><ContainerOutlined/> Learn</a-button>
         <a-button type="primary" class="btn-options"><FormOutlined /> Test</a-button>
-        <a-button type="primary" class="btn-options"><SwitcherFilled/> Match</a-button>
+        <a-button type="primary" class="btn-options" @click="matchGame"><SwitcherFilled/> Match</a-button>
 
       
     </a-row>
@@ -56,7 +67,7 @@
       <a-col :span="2">
         <a-avatar 
           :size="50" 
-          src="https://cdn4.iconfinder.com/data/icons/profession-avatar-5/64/29-programmer-512.png"
+          :src="link ? link : 'https://cdn4.iconfinder.com/data/icons/profession-avatar-5/64/29-programmer-512.png'"
           style="border: 1px solid grey;"
         >
           <template #icon><UserOutlined /></template>
@@ -67,7 +78,7 @@
           <h2 style="margin: 0;">Vũ Vương Lâm</h2>
       </a-col>
       <a-col :span="12" style="text-align: end; font-size:20px;">
-        <EditOutlined style="margin:0 10px; cursor: pointer;"/>
+        <EditOutlined @click="editHocPhan" style="margin:0 10px; cursor: pointer;"/>
         <SmallDashOutlined  style="margin:0 10px; cursor: pointer;"/>
       </a-col>
     </a-row>
@@ -94,7 +105,6 @@
       <a-col style="font-size: 20px;">
         <div>
           <SoundOutlined @click="SoundOutlined2(thehoc.ngonNgu1)" style="margin: 0 7px;"/>
-          <EditOutlined @click="EditOutlined2(thehoc.id)" style="margin: 0 7px;"/> 
           <StarFilled @click="StarFilled2(thehoc.id)" style="margin: 0 7px;"/> 
         </div>
       </a-col>
@@ -107,7 +117,7 @@
 
 <script>
 
-import { defineComponent, ref } from 'vue';
+import { defineComponent, h, ref } from 'vue';
 import MainLayout from "@/layout/main.vue";
 import { useRouter } from 'vue-router';
 import { 
@@ -123,6 +133,8 @@ import {
   UserOutlined,
   SmallDashOutlined,
   ExclamationCircleOutlined,
+  DeleteOutlined,
+  CheckCircleOutlined
 } from "@ant-design/icons-vue"
 import axios from 'axios';
 import apiUrl from '@/constants/api';
@@ -144,6 +156,8 @@ export default defineComponent({
         UserOutlined,
         SmallDashOutlined,
         ExclamationCircleOutlined,
+        DeleteOutlined,
+        CheckCircleOutlined
     },
     setup(){
         const router = useRouter();
@@ -154,6 +168,7 @@ export default defineComponent({
         const onToggleFlipCard = () => {
           isFlipped.value = !isFlipped.value
         }
+        const hocPhanData = ref({});
 
         const GetHocPhanByID= async () => {
           const id = router.currentRoute.value.query.id;
@@ -163,24 +178,37 @@ export default defineComponent({
           })
           .catch(err => {
             notification.open({
-            message: "Lỗi",
-            description: "Có lỗi xảy ra!",
-            icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
-          });
+              message: "Lỗi",
+              description: "Có lỗi xảy ra!",
+              icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+            });
+          })
+        }
+
+        const getHocPhan = async () => {
+          const id = router.currentRoute.value.query.id;
+          await axios.get(`${apiUrl.GET_HOC_PHAN_BY_ID}?id=${id}`)
+          .then(res => {
+            hocPhanData.value = res.data;
+          })
+          .catch(err => {
+            notification.open({
+              message: "Lỗi",
+              description: `Có lỗi xảy ra:${err}`,
+              icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+            });
           })
         }
         
 
         const SoundOutlined = (text) => {
           onToggleFlipCard()
-          console.log("SoundOutlined");
           const msg = new SpeechSynthesisUtterance();
             msg.lang = 'en-US';
             msg.text = text;
             window.speechSynthesis.speak(msg);
         }
         const SoundOutlined2 = (text) => {
-          console.log("SoundOutlined");
           const msg = new SpeechSynthesisUtterance();
             msg.lang = 'en-US';
             msg.text = text;
@@ -189,24 +217,67 @@ export default defineComponent({
 
         const EditOutlined =() => {
           onToggleFlipCard()
-          console.log("EditOutlined");
         }
         const EditOutlined2 =() => {
-          console.log("EditOutlined");
         }
 
         const StarFilled =() => {
           onToggleFlipCard()
-          console.log("StarFilled");
         }
         const StarFilled2 =() => {
-          console.log("StarFilled");
         }
+
+        const deleteHocPhan = () =>{
+          axios.delete(`${apiUrl.DELETE_HOC_PHAN}?id=${hocPhanData.value.id}`)
+          .then(res => {
+            notification.open({
+              message: 'Thông báo',
+              description:'Xóa học phần thành công',
+              icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
+            });
+            router.push("hoc-phan")
+          })
+          .catch(er=> {
+            notification.open({
+              message: "Lỗi",
+              description: `Có lỗi xảy ra:${er}`,
+              icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+            });
+          })
+        }
+
+        const editHocPhan=()=> {
+          router.push(`sua-hoc-phan?id=${hocPhanData.value.id}`)
+        }
+
+        const link = ref("");
+        const getAvt = () => {
+          const userId = sessionStorage.getItem("userId");
+
+          axios.get(`${apiUrl.GET_AVATAR}?id=${userId}`, { responseType: 'blob' })
+          .then(resa => {
+            console.log(resa);
+            // const blob = new Blob([resa]);
+            var url = URL.createObjectURL(resa.data);
+            link.value = url;
+
+          })
+          .catch(er => {
+            console.log(er);
+          })
+        }
+
+        const matchGame = () => {
+          router.push(`match-game?id=${hocPhanData.value.id}`)
+        }
+
         return {
           router,
           loading,
+          hocPhanData,
           isFlipped,
           sortCard,
+          link,
           listTheHoc,
           onToggleFlipCard,
           SoundOutlined,
@@ -216,10 +287,17 @@ export default defineComponent({
           StarFilled,
           StarFilled2,
           GetHocPhanByID,
+          getHocPhan,
+          deleteHocPhan,
+          editHocPhan,
+          getAvt,
+          matchGame,
         }
     },
     mounted(){
       this.GetHocPhanByID();
+      this.getHocPhan();
+      this.getAvt();
     }
 })
 </script>

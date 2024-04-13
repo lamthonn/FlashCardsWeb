@@ -21,8 +21,12 @@
           <router-link to="/dang-ky">Bạn chưa có tài khoản?</router-link >
           <a-button type="primary" :disabled="disabled" @click="DangNhap"  ghost>Đăng Nhập</a-button>
         </div>
-        <div id="login">
-          <button @click="loginWithFacebook">login with facebook</button>
+        <div id="login" style="font-size:16px; text-align:center; margin-top:15px;">
+          <a-button @click="loginWithFacebook" type="primary">
+            <FacebookOutlined 
+              style="font-size:16px;"
+            />
+          login with facebook</a-button>
         </div>
       </a-form>
     </a-card>
@@ -40,6 +44,7 @@ import { notification } from "ant-design-vue";
 import {
   ExclamationCircleOutlined,
   CheckCircleOutlined,
+  FacebookOutlined,
 } from '@ant-design/icons-vue';
 import { h } from "vue";
 import firebaseConfig from '@/constants/firebaseConfig'
@@ -53,7 +58,8 @@ export default defineComponent({
   name: "dang-nhap",
   components: {
     ExclamationCircleOutlined,
-    CheckCircleOutlined
+    CheckCircleOutlined,
+    FacebookOutlined
   },
   setup() {
     const store = useStore();

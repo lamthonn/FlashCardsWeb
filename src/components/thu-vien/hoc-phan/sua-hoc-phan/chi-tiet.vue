@@ -1,10 +1,10 @@
 <template>
   <MainLayout>
-    <a-card title="Tạo mới học phần" :loading="loading">
+    <a-card title="Sửa mới học phần" :loading="loading">
       <template #extra>
         <a-button type="primary" @click="handleOk">
           <PlusOutlined />
-          Tạo
+          Lưu
         </a-button>
       </template>
       <a-space size="small" direction="vertical" style="width: 100%">
@@ -38,11 +38,19 @@
           <a-col :span="6">
             <a-form title="Trạng thái">
               <h3 style="margin-left: 15px">Thư mục</h3>
-              <a-select v-model:value="formState.thuMucId" style="width: 180px;margin-left: 15px" placeholder="Chọn thư mục">
-                <a-select-option v-for="thumuc in thuMuc" :key="thumuc.key" :value="thumuc.id">{{ thumuc.tieuDe }}</a-select-option>
+              <a-select
+                v-model:value="formState.thuMucId"
+                style="width: 180px; margin-left: 15px"
+                placeholder="Chọn thư mục"
+              >
+                <a-select-option
+                  v-for="thumuc in thuMuc"
+                  :key="thumuc.key"
+                  :value="thumuc.id"
+                  >{{ thumuc.tieuDe }}</a-select-option
+                >
               </a-select>
             </a-form>
-            
           </a-col>
         </a-row>
       </a-space>
@@ -72,9 +80,12 @@
                   "
                 >
                   <p>Thuật ngữ</p>
-                  <a-select v-model:value="form.thuatNgu">
-                    <a-select-option disabled value="Chọn ngôn ngữ">Chọn ngôn ngữ</a-select-option>
-                    <a-select-option v-for="ngonngu in languages" :key="ngonngu.id" :value="ngonngu.name" >
+                  <a-select v-model:value="form.thuatNgu" disabled>
+                    <a-select-option
+                      v-for="ngonngu in languages"
+                      :key="ngonngu.id"
+                      :value="ngonngu.name"
+                    >
                       {{ ngonngu.name }}
                     </a-select-option>
                   </a-select>
@@ -93,9 +104,13 @@
                   "
                 >
                   <p>Định nghĩa</p>
-                  <a-select v-model:value="form.giaiThich">
-                    <a-select-option disabled value="Chọn ngôn ngữ">Chọn ngôn ngữ</a-select-option>
-                    <a-select-option v-for="ngonngu in languages" :key="ngonngu.id" :value="ngonngu.name" >
+                  <a-select v-model:value="form.giaiThich" disabled>
+                    
+                    <a-select-option
+                      v-for="ngonngu in languages"
+                      :key="ngonngu.id"
+                      :value="ngonngu.name"
+                    >
                       {{ ngonngu.name }}
                     </a-select-option>
                   </a-select>
@@ -112,8 +127,8 @@
     </a-card>
   </MainLayout>
 </template>
-    
-<script>
+      
+  <script>
 import { defineComponent, reactive, ref, h } from "vue";
 import MainLayout from "@/layout/main.vue";
 import {
@@ -137,22 +152,19 @@ export default defineComponent({
   },
   setup() {
     const loading = ref(false);
-    const thuMuc = ref([])
-    const formRef = ref()
+    const thuMuc = ref([]);
+    const formRef = ref();
     const form = reactive({
-      thuatNgu:"Chọn ngôn ngữ",
-      giaiThich:"Chọn ngôn ngữ",
-    })
+      thuatNgu: "Chọn ngôn ngữ",
+      giaiThich: "Chọn ngôn ngữ",
+    });
     const SoThe = ref([
-      { stt: 1, ngonNgu1: "", ngonNgu2: "" },
-      { stt: 2, ngonNgu1: "", ngonNgu2: "" },
-      { stt: 3, ngonNgu1: "", ngonNgu2: "" },
     ]);
     const formState = reactive({
       tieuDe: null,
       chiTiet: null,
       trangThai: "Public",
-      thuMucId:null,
+      thuMucId: null,
     });
     const layout = {
       labelCol: {
@@ -163,54 +175,54 @@ export default defineComponent({
       },
     };
     const handleOk = () => {
-      loading.value = true;
-      const userId = sessionStorage.getItem("userId");
-      // Khởi tạo mảng chứa các theHocs
-      let theHocsArray = [];
-
-      // Lặp qua mảng SoThe và thêm vào mảng theHocsArray
-      SoThe.value.forEach((item) => {
-        theHocsArray.push({
-          id: "string", // Thay "string" bằng giá trị thích hợp
-          ngonNgu1: item.ngonNgu1, // Sử dụng giá trị từ mảng SoThe
-          ngonNgu2: item.ngonNgu2, // Sử dụng giá trị từ mảng SoThe
-          hocPhanId: "string", // Thay "string" bằng giá trị thích hợp
-          isKnow: false, // Hoặc true nếu muốn đặt mặc định
-          thuatNgu:form.thuatNgu,
-          giaiThich:form.giaiThich
-        });
-      });
-
-      axios
-        .post(apiUrl.THEM_HOC_PHAN, {
-          'hocphan': {
-            'id': "string",
-            'tieuDe': formState.tieuDe,
-            'moTa': formState.chiTiet,
-            'ngayTao': Date.now().toString(),
-            'ngaySua': Date.now().toString(),
-            'trangThai': formState.trangThai,
-            'userId': userId,
-            'thuMucId': formState.thuMucId,
-          },
-          'theHocs': theHocsArray,
-        })
-        .then(() => {
-          notification.open({
-            message: "Thông Báo",
-            description: "Thêm học phần thành công!",
-            icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
-          });
-          router.push("/hoc-phan")
-        })
-        .catch((err) => {
-          console.log(err);
-          notification.open({
-            message: "Lỗi",
-            description: "Có lỗi xảy ra!",
-            icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+        loading.value = true;
+        const userId = sessionStorage.getItem("userId");
+        const id = router.currentRoute.value.query.id;
+        // Khởi tạo mảng chứa các theHocs
+        let theHocsArray = [];
+        // Lặp qua mảng SoThe và thêm vào mảng theHocsArray
+        SoThe.value.forEach((item) => {
+          theHocsArray.push({
+            id: item.id ? item.id : "string", 
+            ngonNgu1: item.ngonNgu1, // Sử dụng giá trị từ mảng SoThe
+            ngonNgu2: item.ngonNgu2, // Sử dụng giá trị từ mảng SoThe
+            hocPhanId: id, // Thay "string" bằng giá trị thích hợp
+            isKnow: false, // Hoặc true nếu muốn đặt mặc định
+            thuatNgu: form.thuatNgu,
+            giaiThich: form.giaiThich,
           });
         });
+        axios
+          .put(`${apiUrl.EDIT_HOC_PHAN}?id=${id}`, {
+            hocphan: {
+              id: "string",
+              tieuDe: formState.tieuDe,
+              moTa: formState.chiTiet,
+              ngayTao: Date.now().toString(),
+              ngaySua: Date.now().toString(),
+              trangThai: formState.trangThai,
+              userId: userId,
+              thuMucId: formState.thuMucId,
+            },
+            theHocs: theHocsArray,
+          })
+          .then(() => {
+            notification.open({
+              message: "Thông Báo",
+              description: "Sửa học phần thành công!",
+              icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
+            });
+            
+            router.push(`/chi-tiet-hoc-phan?id=${id}`);
+          })
+          .catch((err) => {
+            console.log(err);
+            notification.open({
+              message: "Lỗi",
+              description: `Có lỗi xảy ra: ${err}`,
+              icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+            });
+          });
     };
 
     const ThemThe = () => {
@@ -218,8 +230,64 @@ export default defineComponent({
         stt: SoThe.value.findLast((x) => x.stt).stt + 1,
         ngonNgu1: "",
         ngonNgu2: "",
-        
       });
+    };
+
+    const GetThuMuc = async () => {
+      await axios
+        .get(apiUrl.GET_ALL_THU_MUC)
+        .then((res) => {
+          thuMuc.value = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    const languages = ref([]);
+    const getLanguage = async () => {
+      await axios.get(apiUrl.GET_ALL_NGON_NGU).then((res) => {
+        languages.value = res.data;
+      });
+    };
+
+    const GetHocPhanByID = async () => {
+      const id = router.currentRoute.value.query.id;
+      await axios
+        .get(`${apiUrl.GET_HOC_PHAN_BY_ID}?id=${id}`)
+        .then((res) => {
+          formState.tieuDe = res.data.tieuDe;
+          formState.chiTiet = res.data.moTa;
+          formState.trangThai = res.data.trangThai;
+          formState.thuMucId = res.data.thuMucId;
+        })
+        .catch((err) => {
+          notification.open({
+            message: "Lỗi",
+            description: `Có lỗi xảy ra:${err}`,
+            icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+          });
+        });
+    };
+
+    const GetAllTheHoc = async () => {
+      const id = router.currentRoute.value.query.id;
+      await axios
+        .get(`${apiUrl.GET_THE_HOC}?id=${id}`)
+        .then((res) => {
+            form.giaiThich = res.data[0].giaiThich;
+            form.thuatNgu = res.data[0].thuatNgu;
+            res.data.forEach((x,index) => {
+                SoThe.value.push({id:x.id, stt: index + 1, ngonNgu1: x.ngonNgu1, ngonNgu2: x.ngonNgu2 })
+            });
+        })
+        .catch((err) => {
+          notification.open({
+            message: "Lỗi",
+            description: "Có lỗi xảy ra!",
+            icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+          });
+        });
     };
 
     const xoaThe = (stt) => {
@@ -232,29 +300,6 @@ export default defineComponent({
         }
       }
     }
-
-    const GetThuMuc = async () => {
-      await axios.get(apiUrl.GET_ALL_THU_MUC)
-      .then(res => {
-        thuMuc.value = res.data;
-        console.log(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-    }
-
-
-    const languages = ref([])
-    const getLanguage = async () => {
-      await axios.get(apiUrl.GET_ALL_NGON_NGU)
-      .then(res => {
-        languages.value = res.data
-
-        console.log(languages.value);
-      })
-    }
-
     return {
       formState,
       loading,
@@ -268,17 +313,21 @@ export default defineComponent({
       ThemThe,
       GetThuMuc,
       getLanguage,
-      xoaThe
+      GetHocPhanByID,
+      GetAllTheHoc,
+      xoaThe,
     };
   },
-  mounted(){
-    this.GetThuMuc()
+  mounted() {
+    this.GetThuMuc();
     this.getLanguage();
-  }
+    this.GetHocPhanByID();
+    this.GetAllTheHoc();
+  },
 });
 </script>
-    
-<style scoped>
+      
+  <style scoped>
 .class-input-hide {
   position: absolute;
   top: 0;

@@ -42,7 +42,7 @@
                                 <a-row>
                                     <a-col :span="3"> {{ hocphan.soTheHoc }} thẻ học</a-col>
                                     <a-col :span="3" style="display: flex; align-items:center; ">
-                                        <a-avatar size="small" style="margin-right: 5px;" src="https://cdn4.iconfinder.com/data/icons/profession-avatar-5/64/29-programmer-512.png"/>  
+                                        <a-avatar size="small" style="margin-right: 5px;" :src="link ? link : 'https://cdn4.iconfinder.com/data/icons/profession-avatar-5/64/29-programmer-512.png'"/>  
                                         {{ Username }}
                                     </a-col>
                                 </a-row>
@@ -96,12 +96,10 @@ export default defineComponent({
             loading.value = false;
         }
 
-        
-
-        const GetHocPhan =async () => {
+        const GetHocPhan =async (id) => {
             var token = sessionStorage.getItem("Token")
             //get username
-            await axios.get(apiUrl.GET_ALL_HOC_PHAN)
+            await axios.get(`${apiUrl.GET_ALL_HOC_PHAN}${id ? "?thuMucId=" + id : ""}`)
             .then(async (res) => {
                 ListHocPhan.value = res.data
                 console.log(res.data);
@@ -126,21 +124,41 @@ export default defineComponent({
             router.push(`/chi-tiet-hoc-phan?id=${id}`)
         }
 
+        const link = ref();
+        const getAvt = () => {
+          const userId = sessionStorage.getItem("userId");
+
+          axios.get(`${apiUrl.GET_AVATAR}?id=${userId}`, { responseType: 'blob' })
+          .then(resa => {
+            console.log(resa);
+            // const blob = new Blob([resa]);
+            var url = URL.createObjectURL(resa.data);
+            link.value = url;
+
+          })
+          .catch(er => {
+            console.log(er);
+          })
+        }
+
         return{
             fromState,
             loading,
             router,
             ListHocPhan,
             ThuMucId,
+            link,
             Username,
             TaoHocPhan,
             GetHocPhan,
-            JoinHocPhan
+            JoinHocPhan,
+            getAvt
         }
     },
     mounted(){
         this.ThuMucId = this.router.currentRoute.value.query.id;
-        this.GetHocPhan();
+        this.GetHocPhan(this.ThuMucId);
+        this.getAvt();
     }
 })
 </script>

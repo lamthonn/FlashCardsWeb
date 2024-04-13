@@ -57,8 +57,6 @@
                     </a-card>
                 </div>
             </a-row>
-
-            
         </a-card>
   </MainLayout>
   <TaoThuMuc ref="themRef" @lamMoiBang="resetList"/>
@@ -116,14 +114,13 @@ export default defineComponent({
             await axios.get(apiUrl.GET_ALL_THU_MUC)
             .then(res => {
                 dsThuMuc.value = res.data;
-                console.log(dsThuMuc.value);
             })
             .catch((err)=> {
                 notification.open({
-                message: "Lỗi",
-                description: "Có lỗi xảy ra!",
-                icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
-            });
+                    message: "Lỗi",
+                    description: "Có lỗi xảy ra!",
+                    icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+                });
             })
         }
 

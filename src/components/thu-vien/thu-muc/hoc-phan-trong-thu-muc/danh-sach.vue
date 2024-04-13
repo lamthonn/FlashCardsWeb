@@ -4,6 +4,7 @@
       <template #extra>
         <a-button type="dashed" @click="ThemThuMuc">
           <PlusOutlined />
+          hello
           Tạo thư mục
         </a-button>
       </template>
