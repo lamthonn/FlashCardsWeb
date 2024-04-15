@@ -145,12 +145,28 @@ export default defineComponent({
         router.push("/quan-ly-nguoi-dung");
         loading.value = false;
       }
+      if(val.key === "DongGop"){
+        router.push("/dong-gop");
+        loading.value = false;
+      }
       if(val.key === "HocPhan"){
         router.push("/hoc-phan");
         loading.value = false;
       }
       if(val.key === "ThuMuc"){
         router.push("/thu-muc");
+        loading.value = false;
+      }
+      if(val.key === "LienHe"){
+        router.push("/lien-he");
+        loading.value = false;
+      }
+      if(val.key === "CaiDat"){
+        router.push("/cai-dat");
+        loading.value = false;
+      }
+      if(val.key === "QuanLyYKienDongGop"){
+        router.push("/quan-ly-y-kien-dong-gop");
         loading.value = false;
       }
       
@@ -208,12 +224,15 @@ export default defineComponent({
 
     const getAvt = () => {
       const userId = sessionStorage.getItem("userId");
-      if(role.value === "User")
+      const role_User = sessionStorage.getItem("Role");
+      if(role_User === "User")
       {
         axios.get(`${apiUrl.GET_AVATAR}?id=${userId}`, { responseType: 'blob' })
         .then(resa => {
           var url = URL.createObjectURL(resa.data);
           link.value = url;
+
+          console.log(link.value);
         })
         .catch(er => {
           notification.open({
@@ -224,6 +243,22 @@ export default defineComponent({
         })
       }
     }
+    // const getAvt = () => {
+    //       const userId = sessionStorage.getItem("userId");
+
+    //       axios.get(`${apiUrl.GET_AVATAR}?id=${userId}`, { responseType: 'blob' })
+    //       .then(resa => {
+    //         console.log(resa);
+    //         // const blob = new Blob([resa]);
+    //         var url = URL.createObjectURL(resa.data);
+    //         link.value = url;
+
+    //         console.log(url);
+    //       })
+    //       .catch(er => {
+    //         console.log(er);
+    //       })
+    //     }
 
     const getRole = () => {
       role.value = sessionStorage.getItem('Role')
@@ -276,6 +311,6 @@ export default defineComponent({
   <style scoped>
   .avata{
     width: 100%;
-    max-height: 230px;
+    max-height: 200px;
   }
 </style>

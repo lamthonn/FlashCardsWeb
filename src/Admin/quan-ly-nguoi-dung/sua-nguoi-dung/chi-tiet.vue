@@ -10,7 +10,7 @@
     >
       <a-modal
         v-model:visible="visible"
-        title="Thêm thông tin người dùng"
+        title="Xem thông tin người dùng"
         @ok="handleOk"
         width="700px"
         :centered="true"
@@ -57,32 +57,27 @@
         <a-form-item :name="['diaChi']" label="Địa chỉ">
           <a-input v-model:value="formState.diaChi" />
         </a-form-item>
-
-        <a-form-item :name="['role']" label="Quyền">
-          <a-select v-model:value="formState.role" >
-            <a-select-item v-for="item in RoleUser" :key="item.id" :value="item.name">
-                {{ item.name }}
-            </a-select-item>
-          </a-select>
-        </a-form-item>
       </a-modal>
     </a-form>
   </div>
 </template>
-      
-      <script>
-import { defineComponent, ref,h, reactive } from "vue";
-import { UploadOutlined, 
-    CloseOutlined,
-    ExclamationCircleOutlined,
-    CheckCircleOutlined,
- } from "@ant-design/icons-vue";
+          
+          <script>
+import { defineComponent, ref, h, reactive, watch } from "vue";
+import {
+  UploadOutlined,
+  CloseOutlined,
+  ExclamationCircleOutlined,
+  CheckCircleOutlined,
+} from "@ant-design/icons-vue";
 import axios from "axios";
 import apiUrl from "@/constants/api";
 import { notification } from "ant-design-vue";
+import TextBox from "@/components/common/text-box.vue";
 
 export default defineComponent({
   components: {
+    TextBox,
     UploadOutlined,
     CloseOutlined,
     ExclamationCircleOutlined,
@@ -91,10 +86,8 @@ export default defineComponent({
   setup(props, context) {
     const wId = ref("");
     const visible = ref(false);
-    const plainOptions = ['Nam', 'Nữ']
-    const RoleUser = ref([])
     const formState = reactive({
-      id: "",
+      id: null,
       username: null,
       email: null,
       password: null,
@@ -103,16 +96,8 @@ export default defineComponent({
       gioiTinh: null,
       soDienThoai: null,
       diaChi: null,
-      role:null
+      role: null,
     });
-    const layout = {
-      labelCol: {
-        span: 6,
-      },
-      wrapperCol: {
-        span: 16,
-      },
-    };
     const rules = {
         username:[
             {
@@ -164,6 +149,15 @@ export default defineComponent({
             },
         ],
     };
+    const layout = {
+      labelCol: {
+        span: 6,
+      },
+      wrapperCol: {
+        span: 16,
+      },
+    };
+
     const loading = ref(false);
     const showModal = () => {
       visible.value = true;
@@ -172,86 +166,75 @@ export default defineComponent({
     const onFinish = (values) => {};
     // Lưu
     const handleOk = async () => {
-      console.log(formState);
-      const values = {
-        id:'0',
-        username: formState.username,
-        ten:formState.ten,
-        password:formState.password,
-        email:formState.email,
-        ngaySinh:formState.ngaySinh,
-        gioiTinh:formState.gioiTinh,
-        soDienThoai:formState.soDienThoai,
-        diaChi:formState.diaChi,
-        role:formState.role,
-      }
-
-      await axios.post(apiUrl.ADD_USER,values)
-      .then(res=> {
-        notification.open({
-            message: 'Thông báo',
-            description:'Sửa thông tin thành công',
-            icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
-        });
-      })
-      .catch(err=> {
-        notification.open({
-            message: "Lỗi",
-            description: `Có lỗi xảy ra:${err}`,
-            icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
-        });
-      })
-    };
+        await axios.put(`${apiUrl.EDIT_USER_ADMIN}?id=${formState.id}`,formState)
+        .then(res => {
+            notification.open({
+                message: 'Thông báo',
+                description:'Sửa thông tin thành công',
+                icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
+            });
+            visible.value = false;
+        })
+        .catch(er => {
+            notification.open({
+                message: "Lỗi",
+                description: `Có lỗi xảy ra:${er}`,
+                icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+            });
+        })
+    }
     // Hủy
     const handleCancel = () => {
       visible.value = false;
     };
-
-    const getRole = async () => {
-        axios.get(apiUrl.GET_ALL_ROLE)
-        .then(res => {
+    const plainOptions = ['Nam', 'Nữ']
+    watch(wId, async (newValue, oldValue) => {
+      if (newValue) {
+        const token = sessionStorage.getItem("Token");
+        loading.value = true;
+        await axios
+          .get(`${apiUrl.GET_USER_BY_ID}?id=${newValue}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((res) => {
             console.log(res.data);
-            RoleUser.value = res.data
-        })
-        .catch(err => {
-            console.log(err);
-        })
-    }
-    
+            (formState.id = res.data.id),
+              (formState.diaChi = res.data.diaChi),
+              (formState.email = res.data.email),
+              (formState.gioiTinh = res.data.gioiTinh),
+              (formState.username = res.data.username),
+              (formState.ten = res.data.ten),
+              (formState.role = res.data.role),
+              (formState.soDienThoai = res.data.soDienThoai);
+              loading.value = false;
+          })
+          .catch((err) => {
+            loading.value = false;
+            notification.open({
+              message: "Lỗi",
+              description: `Có lỗi xảy ra:${err}`,
+              icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+            });
+          });
+      }
+    });
 
     return {
       wId,
       visible,
       formState,
-      rules,
       layout,
       loading,
-      RoleUser,
+      rules,
+      plainOptions,
       showModal,
       onFinish,
-      handleOk,
       handleCancel,
-      getRole,
-      plainOptions,
+      handleOk,
     };
   },
-  mounted(){
-    this.getRole();
-  }
+  mounted() {},
 });
 </script>
-      
-  <style scoped>
-.class-input-hide {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: none;
-}
-
-.file-name {
-  font-weight: 600;
-  color: var(--ant-primary-color);
-  margin-left: 10px;
-}
-</style>

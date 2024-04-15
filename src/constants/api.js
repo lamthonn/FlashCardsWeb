@@ -8,6 +8,9 @@ const apiUrl = {
     DANG_KY: `${localPath}/api/Auth/Register`,
     CHECK_TOKEN_FACEBOOK:`${localPath}/api/Auth/ValidateFacebookToken`,
 
+    //Role
+    GET_ALL_ROLE:`${localPath}/api/User/GetAllRole`,
+
     //User
     GET_USER_BY_ID:`${localPath}/api/User/GetUserbyId`,
     EDIT_INFOR_USER:`${localPath}/api/User/EditInforUser`,
@@ -15,6 +18,11 @@ const apiUrl = {
     UPDATE_AVATAR:`${localPath}/api/User/UpdateAvatar`,
     GET_AVATAR:`${localPath}/api/User/GetFile`,
     GET_PAGIN_LIST_USER:`${localPath}/api/User/GetPaginUser`,
+    ADD_USER:`${localPath}/api/User/AddUser`,
+    EDIT_USER_ADMIN:`${localPath}/api/User/EditInforUser_Admin`,
+    DELETE_USER:`${localPath}/api/User/DeleteUser`,
+    RESET_PASSWORD:`${localPath}/api/User/ResetPassWord`,
+    GET_ALL_USER:`${localPath}/api/User/GetAllUser`,
 
     //học phần, thẻ học
     THEM_HOC_PHAN:`${localPath}/api/HocPhan/ThemHocPhan`,
@@ -30,6 +38,14 @@ const apiUrl = {
     THEM_THU_MUC:`${localPath}/api/ThuMuc/ThemThuMuc`,
 
     //ngon ngu
-    GET_ALL_NGON_NGU:`${localPath}/api/Language/GetAllLanguages`
+    GET_ALL_NGON_NGU:`${localPath}/api/Language/GetAllLanguages`,
+
+    // ý kiến góp ý
+    GET_ALL_Y_KIEN:`${localPath}/api/YKienGopY/GetAllYKien`,
+    GET_Y_KIEN:`${localPath}/api/YKienGopY/GetYKienGopY`,
+    THEM_Y_KIEN:`${localPath}/api/YKienGopY/ThemYKien`,
+    GET_Y_KIEN_BY_ID:`${localPath}/api/YKienGopY/GetYKienById`,
+    DELETE_Y_KIEN:`${localPath}/api/YKienGopY/DeleteYKienById`,
+    PHAN_HOI:`${localPath}/api/YKienGopY/PhanHoi`,
 }
 export default apiUrl;

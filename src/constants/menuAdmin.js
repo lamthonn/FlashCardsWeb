@@ -7,7 +7,8 @@ import {
     WechatOutlined,
     ContactsOutlined,
     SettingOutlined ,
-    TeamOutlined 
+    TeamOutlined,
+    CommentOutlined
    } from "@ant-design/icons-vue";
 import axios from "axios";
 
@@ -26,6 +27,13 @@ const menuAdminDefaut = [
         icon: () => h(TeamOutlined  ),
         label: 'Quản lý người dùng',
         title: 'Quản lý người dùng',
+    },
+    //quản lý ý kiến đóng góp
+    {
+        key: 'QuanLyYKienDongGop',
+        icon: () => h(CommentOutlined),
+        label: 'Quản lý ý kiến đóng góp',
+        title: 'Quản lý ý kiến đóng góp',
     },
     //cài đặt
     {

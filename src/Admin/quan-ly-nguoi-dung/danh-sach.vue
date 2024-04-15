@@ -3,7 +3,7 @@
     <a-card>
       
       <a-row>
-        <a-col :span="10">
+        <a-col :span="8">
           <a-form>
             <a-form-item label="Từ khóa">
               <a-input></a-input>
@@ -44,13 +44,21 @@
                 <a href="javascript:void(0)" @click="xemThongTinUser(record.id)" style="padding:0 3px;">
                     <EyeOutlined />
                 </a>
-                <a href="javascript:void(0)" @click="xemThongTinUser(record.id)" style="padding:0 3px;">
+                <a href="javascript:void(0)" @click="suaThongTinUser(record.id)" style="padding:0 3px;">
                     <EditOutlined  />
                 </a>
-                <a href="javascript:void(0)" @click="xemThongTinUser(record.id)" style="padding:0 3px;">
+                <a href="javascript:void(0)" @click="xoaThongTinUser(record.id)" style="padding:0 3px;">
+                  <a-popconfirm
+                      title="bạn có chắc chắn muốn xáo ý kiến này?"
+                      ok-text="Yes"
+                      cancel-text="No"
+                      @confirm="xoaYKien(record.id)"
+                      @cancel="cancel"
+                  >
                     <DeleteOutlined   />
+                  </a-popconfirm>
                 </a>
-                <a href="javascript:void(0)" @click="xemThongTinUser(record.id)" style="padding:0 3px;">
+                <a href="javascript:void(0)" @click="doiMatKhau(record.id)" style="padding:0 3px;">
                     <SyncOutlined />
                 </a>
               </template>
@@ -60,26 +68,35 @@
       </a-col>
     </a-row>
   </MainLayout>
-  <!-- <ThemUser ref="themref"/> -->
+  <ThemUser ref="themref"/>
+  <XemUser ref="xemref"/>
+  <SuaUser ref="suaref"/>
 </template>
 
 <script>
 import apiUrl from "@/constants/api";
 import MainLayout from "@/layout/main.vue";
 import axios from "axios";
-import { defineComponent, ref, watch } from "vue";
-// import ThemUser from './them-nguoi-dung/chi-tiet.vue'
+import { defineComponent, ref, h, watch } from "vue";
+import ThemUser from './them-nguoi-dung/chi-tiet.vue'
+import XemUser from './xem-nguoi-dung/chi-tiet.vue'
+import SuaUser from './sua-nguoi-dung/chi-tiet.vue'
 import { 
   EyeOutlined,
   EditOutlined,
   DeleteOutlined,
-  SyncOutlined
+  SyncOutlined,
+  CheckCircleOutlined,
+  ExclamationCircleOutlined
 } from "@ant-design/icons-vue";
+import { notification } from "ant-design-vue";
 
 export default defineComponent({
   components: {
     MainLayout,
-    // ThemUser,
+    ThemUser,
+    XemUser,
+    SuaUser,
     EyeOutlined,
     EditOutlined,
     DeleteOutlined,
@@ -91,6 +108,8 @@ export default defineComponent({
     const totalRecord = ref(0)
     const listUser = ref([])
     const themref = ref();
+    const xemref = ref();
+    const suaref = ref();
     const columns = [
       {
         title:'Username',
@@ -140,7 +159,49 @@ export default defineComponent({
     }
 
     const xemThongTinUser = (id) => {
-      console.log(id);
+      xemref.value.visible = true
+      xemref.value.wId = id
+    }
+
+    const suaThongTinUser = (id) => {
+      suaref.value.visible = true
+      suaref.value.wId = id
+    }
+
+    const xoaThongTinUser = async (id) => {
+      await axios.delete(`${apiUrl.DELETE_USER}?id=${id}`)
+      .then(()=> {
+        notification.open({
+          message: 'Thông báo',
+          description:'Xóa thông tin thành công',
+          icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
+        });
+      })
+      .catch(er => {
+        notification.open({
+          message: 'Lỗi',
+          description:`Có lỗi xảy ra: ${er}`,
+          icon: () => h(ExclamationCircleOutlined, { style: "color: red;" }),
+        });
+      })
+    }
+
+    const doiMatKhau = async (id) => {
+      await axios.put(`${apiUrl.RESET_PASSWORD}?id=${id}`)
+      .then(res => {
+        notification.open({
+          message: 'Thông báo',
+          description:'Đổi mật khẩu thành công',
+          icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
+        });
+      })
+      .catch(er =>{
+        notification.open({
+          message: 'Lỗi',
+          description:`Có lỗi xảy ra: ${er}`,
+          icon: () => h(ExclamationCircleOutlined, { style: "color: red;" }),
+        });
+      })
     }
 
     watch(pageNumber, () => {
@@ -157,6 +218,11 @@ export default defineComponent({
       xemThongTinUser,
       themThongTinUser,
       themref,
+      xemref,
+      suaref,
+      suaThongTinUser,
+      xoaThongTinUser,
+      doiMatKhau,
     }
   },
   mounted(){

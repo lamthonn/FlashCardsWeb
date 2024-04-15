@@ -55,8 +55,8 @@ const menuDefaut = [
     {
         key: 'DongGop',
         icon: () => h(WechatOutlined ),
-        label: 'Đóng góp',
-        title: 'Đóng góp',
+        label: 'Đặt câu hỏi',
+        title: 'Đặt câu hỏi',
     },
     //liên hệ
     {

@@ -101,6 +101,33 @@ const routes = [
       }
     ]
   },
+  //đóng góp
+  {
+    path: '/dong-gop',
+    name: '/dong-gop',
+    component: () => import('../views/dong-gop/index.vue'),
+    meta: {
+      breadcrumb: 'Đặt câu hỏi' // Định nghĩa breadcrumb cho route này
+    }
+  },
+  //Liên hệ
+  {
+    path: '/lien-he',
+    name: '/lien-he',
+    component: () => import('../views/lien-he/index.vue'),
+    meta: {
+      breadcrumb: 'Liên hệ' // Định nghĩa breadcrumb cho route này
+    }
+  },
+  //Cài đặt
+  {
+    path: '/cai-dat',
+    name: '/cai-dat',
+    component: () => import('../views/cai-dat/index.vue'),
+    meta: {
+      breadcrumb: 'Cài đặt' // Định nghĩa breadcrumb cho route này
+    }
+  },
   //trang chủ
   {
     path: '/trang-chu',
@@ -125,6 +152,14 @@ const routes = [
       breadcrumb: 'Quản lý người dùng' 
     },
     component: () => import('@/views_admin/quan-ly-nguoi-dung/index.vue'),
+  },
+  {
+    path: '/quan-ly-y-kien-dong-gop',
+    name: '/quan-ly-y-kien-dong-gop',
+    meta: {
+      breadcrumb: 'Quản lý ý kiến đóng góp' 
+    },
+    component: () => import('@/views_admin/quan-ly-y-kien-dong-gop/index.vue'),
   },
 ]
 
