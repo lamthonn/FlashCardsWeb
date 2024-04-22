@@ -194,6 +194,7 @@ export default defineComponent({
             'thuMucId': formState.thuMucId,
           },
           'theHocs': theHocsArray,
+          'userId': userId
         })
         .then(() => {
           notification.open({

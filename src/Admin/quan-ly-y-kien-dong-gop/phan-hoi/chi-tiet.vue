@@ -84,17 +84,20 @@ export default defineComponent({
     const onFinish = (values) => {};
     // Lưu
     const handleOk = async () => {
-        await axios.put(`${apiUrl.PHAN_HOI}?id=${wId.value}&data=${formState.phanHoi}`,{
+      const userId = sessionStorage.getItem('userId');
+        await axios.put(`${apiUrl.PHAN_HOI}?id=${wId.value}&data=${formState.phanHoi}&userId=${userId}`,{
             id: wId.value,
-            data: formState.phanHoi
+            data: formState.phanHoi,
+            userId: userId
         })
         .then(res => {
             notification.open({
                 message: 'Thông báo',
-                description:'Sửa thông tin thành công',
+                description:'Gửi thông tin phản hồi thành công',
                 icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
             });
             visible.value = false;
+            context.emit('lamMoiBang');
         })
         .catch(er => {
             notification.open({

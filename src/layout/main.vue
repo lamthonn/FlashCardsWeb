@@ -19,13 +19,13 @@
       </a-col>
 
       <a-col :span="1" style="margin-left:2rem">
-        <a-badge count="5">
+        <!-- <a-badge count="5">
           <a-avatar shape="square" size="large" >
             <template #icon>
               <BellOutlined />
             </template>
           </a-avatar>
-        </a-badge>
+        </a-badge> -->
       </a-col>
       <a-col :span="4">
         <a-button type="primary" style="background-color:#ffcd1f; color:black; width:100%;font-weight: bold;"  :loading="loading">Nâng cấp: VocaLearn Premium</a-button>
@@ -235,11 +235,12 @@ export default defineComponent({
           console.log(link.value);
         })
         .catch(er => {
-          notification.open({
-              message: "Lỗi",
-              description: "Có lỗi xảy ra!",
-              icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
-          });
+          // notification.open({
+          //     message: "Lỗi",
+          //     description: "Có lỗi xảy ra!",
+          //     icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+          // });
+          console.log(er);
         })
       }
     }

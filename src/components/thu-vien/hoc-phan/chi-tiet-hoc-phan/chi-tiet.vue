@@ -228,7 +228,8 @@ export default defineComponent({
         }
 
         const deleteHocPhan = () =>{
-          axios.delete(`${apiUrl.DELETE_HOC_PHAN}?id=${hocPhanData.value.id}`)
+          const userId = sessionStorage.getItem('userId')
+          axios.delete(`${apiUrl.DELETE_HOC_PHAN}?id=${hocPhanData.value.id}&userId=${userId}`)
           .then(res => {
             notification.open({
               message: 'Thông báo',

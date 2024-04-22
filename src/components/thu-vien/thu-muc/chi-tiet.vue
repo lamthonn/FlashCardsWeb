@@ -111,7 +111,13 @@ export default defineComponent({
         }
 
         const GetData = async () => {
-            await axios.get(apiUrl.GET_ALL_THU_MUC)
+            const userId = sessionStorage.getItem('userId')
+            await axios.get(`${apiUrl.GET_ALL_THU_MUC}?id=${userId}&keySearch=${fromState.keySearch ?? ''}`,{
+                params:{
+                    'userId':userId,
+                    'keySearch':fromState.keySearch ?? ''
+                }
+            })
             .then(res => {
                 dsThuMuc.value = res.data;
             })

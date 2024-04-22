@@ -98,8 +98,9 @@ export default defineComponent({
 
         const GetHocPhan =async (id) => {
             var token = sessionStorage.getItem("Token")
+            const userId = sessionStorage.getItem('userId');
             //get username
-            await axios.get(`${apiUrl.GET_ALL_HOC_PHAN}${id ? "?thuMucId=" + id : ""}`)
+            await axios.get(`${apiUrl.GET_ALL_HOC_PHAN}?thuMucId=${id ?? ''}&userId=${userId}`)
             .then(async (res) => {
                 ListHocPhan.value = res.data
                 console.log(res.data);

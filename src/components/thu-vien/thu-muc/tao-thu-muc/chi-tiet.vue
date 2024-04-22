@@ -78,6 +78,7 @@ export default defineComponent({
         const handleOk = async () => {
             var token = sessionStorage.getItem("Token");
             var decode = jwtDecode(token);
+            const userId = sessionStorage.getItem('userId')
             console.log(token);
             await axios.post(apiUrl.THEM_THU_MUC,{
                 'id': '0',
@@ -85,6 +86,7 @@ export default defineComponent({
                 'moTa': formState.moTa,
                 'createdBy': decode.ten,
                 'lastModifiedBy': decode.ten,
+                'userId': userId
             })
             .then((res) => {
                 notification.open({

@@ -140,6 +140,7 @@ export default defineComponent({
                 icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
             });
             GetAllYKien()
+            noiDung.value = ''
         })
         .catch(er => {
             notification.open({

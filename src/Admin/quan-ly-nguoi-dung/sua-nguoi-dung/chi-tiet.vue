@@ -166,7 +166,21 @@ export default defineComponent({
     const onFinish = (values) => {};
     // Lưu
     const handleOk = async () => {
-        await axios.put(`${apiUrl.EDIT_USER_ADMIN}?id=${formState.id}`,formState)
+      const userId = sessionStorage.getItem('userId')
+      const values = {
+        id: formState.id,
+        username: formState.username,
+        email: formState.email,
+        password: formState.password,
+        ten:formState.ten,
+        ngaySinh: formState.ngaySinh,
+        gioiTinh:formState.gioiTinh,
+        soDienThoai: formState.soDienThoai,
+        diaChi: formState.diaChi,
+        role: formState.role,
+        userId:userId
+      }
+        await axios.put(`${apiUrl.EDIT_USER_ADMIN}?id=${formState.id}`,values)
         .then(res => {
             notification.open({
                 message: 'Thông báo',
@@ -174,6 +188,7 @@ export default defineComponent({
                 icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
             });
             visible.value = false;
+            context.emit('lamMoiBang')
         })
         .catch(er => {
             notification.open({

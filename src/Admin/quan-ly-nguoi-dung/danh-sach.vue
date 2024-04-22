@@ -47,20 +47,26 @@
                 <a href="javascript:void(0)" @click="suaThongTinUser(record.id)" style="padding:0 3px;">
                     <EditOutlined  />
                 </a>
-                <a href="javascript:void(0)" @click="xoaThongTinUser(record.id)" style="padding:0 3px;">
                   <a-popconfirm
-                      title="bạn có chắc chắn muốn xáo ý kiến này?"
+                      title="bạn có chắc chắn muốn xóa tài khoản này?"
                       ok-text="Yes"
                       cancel-text="No"
-                      @confirm="xoaYKien(record.id)"
+                      @confirm="xoaThongTinUser(record.id)"
                       @cancel="cancel"
                   >
-                    <DeleteOutlined   />
+                    <a href="javascript:void(0)"><DeleteOutlined   /></a>
                   </a-popconfirm>
-                </a>
-                <a href="javascript:void(0)" @click="doiMatKhau(record.id)" style="padding:0 3px;">
+                  <a-popconfirm
+                      title="bạn có chắc chắn muốn cập nhật lại mật khẩu cho tà khoản này?"
+                      ok-text="Yes"
+                      cancel-text="No"
+                      @confirm="doiMatKhau(record.id)"
+                      @cancel="cancel"
+                  >
+                <a href="javascript:void(0)" style="padding:0 3px;">
                     <SyncOutlined />
                 </a>
+              </a-popconfirm>
               </template>
             </template>
           </a-table>
@@ -68,9 +74,9 @@
       </a-col>
     </a-row>
   </MainLayout>
-  <ThemUser ref="themref"/>
+  <ThemUser ref="themref" @lamMoiBang="getUser()"/>
   <XemUser ref="xemref"/>
-  <SuaUser ref="suaref"/>
+  <SuaUser ref="suaref" @lamMoiBang="getUser()"/>
 </template>
 
 <script>
@@ -103,7 +109,7 @@ export default defineComponent({
     SyncOutlined
   },
   setup(){
-    const pageSize = ref(5)
+    const pageSize = ref(10)
     const pageNumber = ref(1)
     const totalRecord = ref(0)
     const listUser = ref([])
@@ -169,13 +175,15 @@ export default defineComponent({
     }
 
     const xoaThongTinUser = async (id) => {
-      await axios.delete(`${apiUrl.DELETE_USER}?id=${id}`)
+      const userId = sessionStorage.getItem('userId');
+      await axios.delete(`${apiUrl.DELETE_USER}?id=${id}&userId=${userId}`)
       .then(()=> {
         notification.open({
           message: 'Thông báo',
           description:'Xóa thông tin thành công',
           icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
         });
+        getUser();
       })
       .catch(er => {
         notification.open({
@@ -187,7 +195,11 @@ export default defineComponent({
     }
 
     const doiMatKhau = async (id) => {
-      await axios.put(`${apiUrl.RESET_PASSWORD}?id=${id}`)
+      const userId = sessionStorage.getItem('userId');
+      await axios.put(`${apiUrl.RESET_PASSWORD}?id=${id}&userId=${userId}`,{
+        id: id,
+        userId:userId
+      })
       .then(res => {
         notification.open({
           message: 'Thông báo',

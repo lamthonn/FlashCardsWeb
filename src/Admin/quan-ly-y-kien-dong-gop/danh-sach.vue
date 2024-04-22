@@ -58,7 +58,7 @@
 
   </MainLayout>
   <XemYKien ref="xemref"/>
-  <PhanHoiYKien ref="phanhoiref"/>
+  <PhanHoiYKien ref="phanhoiref" @lamMoiBang="getYKienGopY()"/>
 </template>
   
   <script>

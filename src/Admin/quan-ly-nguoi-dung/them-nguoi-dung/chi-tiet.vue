@@ -172,7 +172,7 @@ export default defineComponent({
     const onFinish = (values) => {};
     // Lưu
     const handleOk = async () => {
-      console.log(formState);
+      const userId = sessionStorage.getItem('userId')
       const values = {
         id:'0',
         username: formState.username,
@@ -184,6 +184,7 @@ export default defineComponent({
         soDienThoai:formState.soDienThoai,
         diaChi:formState.diaChi,
         role:formState.role,
+        userId: userId
       }
 
       await axios.post(apiUrl.ADD_USER,values)
@@ -193,6 +194,8 @@ export default defineComponent({
             description:'Sửa thông tin thành công',
             icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
         });
+        visible.value = false;
+        context.emit('lamMoiBang')
       })
       .catch(err=> {
         notification.open({

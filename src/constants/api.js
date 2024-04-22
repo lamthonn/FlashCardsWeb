@@ -47,5 +47,8 @@ const apiUrl = {
     GET_Y_KIEN_BY_ID:`${localPath}/api/YKienGopY/GetYKienById`,
     DELETE_Y_KIEN:`${localPath}/api/YKienGopY/DeleteYKienById`,
     PHAN_HOI:`${localPath}/api/YKienGopY/PhanHoi`,
+
+    //nhật ký hoạt động
+    NHAT_KY_HOAT_DONG:`${localPath}/api/NhatKyHoatDong/GetPaginLog`
 }
 export default apiUrl;
