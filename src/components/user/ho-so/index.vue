@@ -335,17 +335,17 @@ export default defineComponent({
                 })
                 .catch(err=> {
                   notification.open({
-                    message: 'Thông báo',
+                    message: 'Lỗi',
                     description:`Sửa ảnh đại diện không thành công: ${err}`,
-                    icon: () => h(ExclamationCircleOutlined, { style: "color: #108ee9" }),
+                    icon: () => h(ExclamationCircleOutlined, { style: "color: red;" }),
                   });
                 })
               })
               .catch(er => {
                 notification.open({
-                  message: 'Thông báo',
+                  message: 'Lỗi',
                   description:`Sửa ảnh đại diện không thành công: ${er}`,
-                  icon: () => h(ExclamationCircleOutlined, { style: "color: #108ee9" }),
+                  icon: () => h(ExclamationCircleOutlined, { style: "color: red;" }),
                 });
               })
 

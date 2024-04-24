@@ -106,7 +106,7 @@
               <a-row>
                 <a-col :span="20">Xóa tài khoản</a-col>
                 <a-col :span="4">
-                  <a-button type="primary" danger>
+                  <a-button type="primary" danger @click="xoaTaiKhoan">
                     Xóa tài khoản
                   </a-button>
                 </a-col>
@@ -117,6 +117,7 @@
     </div>
   </MainLayout>
   <DoiMatKhau ref="DoiMatKhauRef"/>
+  <XoaTaiKhoan ref="XoaTaiKhoanRef"/>
 </template>
   
   <script>
@@ -131,12 +132,14 @@ import {
 import { useRouter } from "vue-router";
 import moment from "moment"
 import DoiMatKhau from './doi-mat-khau/chi-tiet.vue'
+import XoaTaiKhoan from './xoa-tai-khoan/chi-tiet.vue'
 
 export default defineComponent({
   components: {
     MainLayout,
     ExclamationCircleOutlined,
-    DoiMatKhau
+    DoiMatKhau,
+    XoaTaiKhoan
   },
   setup() {
     const router = useRouter();
@@ -237,6 +240,11 @@ export default defineComponent({
       DoiMatKhauRef.value.visible = true;
     }
 
+    //xóa tài khoản
+    const XoaTaiKhoanRef = ref();
+    const xoaTaiKhoan = () => {
+      XoaTaiKhoanRef.value.visible = true;
+    }
     //code generate - no change
     const formatDateToIsoStringHHss = (date) => {
       return moment(date).subtract(7, 'h').format('HH:mm:ss DD-MM-yyyy')
@@ -256,12 +264,14 @@ export default defineComponent({
       pageNumber,
       totalRecord,
       DoiMatKhauRef,
+      XoaTaiKhoanRef,
       getUserById,
       ChangeInfor,
       formatDateToIsoStringHHss,
       getLog,
       getAvt,
-      doiMatKhau
+      doiMatKhau,
+      xoaTaiKhoan
     }
   },
   mounted(){

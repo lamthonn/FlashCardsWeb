@@ -7,6 +7,8 @@ const apiUrl = {
     DANG_KY_FACEBOOK: `${localPath}/api/Auth/RegisterWithFacebook`,
     DANG_KY: `${localPath}/api/Auth/Register`,
     CHECK_TOKEN_FACEBOOK:`${localPath}/api/Auth/ValidateFacebookToken`,
+    CHANGED_PASSWORD:`${localPath}/api/Auth/ChangePassword`,
+    DELETE_ACCOUNT:`${localPath}/api/Auth/DeleteAccount`,
 
     //Role
     GET_ALL_ROLE:`${localPath}/api/User/GetAllRole`,
