@@ -119,6 +119,15 @@ const routes = [
       breadcrumb: 'Liên hệ' // Định nghĩa breadcrumb cho route này
     }
   },
+  // blog
+  {
+    path: '/blog-user',
+    name: '/blog-user',
+    component: () => import('../views/blog/blog-user.vue'),
+    meta: {
+      breadcrumb: 'Blog' // Định nghĩa breadcrumb cho route này
+    }
+  },
   //Cài đặt
   {
     path: '/cai-dat',
@@ -160,6 +169,14 @@ const routes = [
       breadcrumb: 'Quản lý ý kiến đóng góp' 
     },
     component: () => import('@/views_admin/quan-ly-y-kien-dong-gop/index.vue'),
+  },
+  {
+    path: '/quan-ly-blog',
+    name: '/quan-ly-blog',
+    meta: {
+      breadcrumb: 'Quản lý Blog' 
+    },
+    component: () => import('@/views_admin/quan-ly-blog/blog-admin.vue'),
   },
 ]
 

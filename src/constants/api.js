@@ -49,6 +49,14 @@ const apiUrl = {
     PHAN_HOI:`${localPath}/api/YKienGopY/PhanHoi`,
 
     //nhật ký hoạt động
-    NHAT_KY_HOAT_DONG:`${localPath}/api/NhatKyHoatDong/GetPaginLog`
+    NHAT_KY_HOAT_DONG:`${localPath}/api/NhatKyHoatDong/GetPaginLog`,
+
+    // blog
+    GET_ALL_BLOG:`${localPath}/api/Blog/GetAllBlog`,
+    THEM_BLOG:`${localPath}/api/Blog/ThemBlog`,
+    SUA_BLOG:`${localPath}/api/Blog/EditBlog_Admin`,
+    XOA_BLOG:`${localPath}/api/Blog/DeleteBlog_Admin`,
+    UPDATE_BLOG:`${localPath}/api/Blog/UpdateBlog`,
+    GET_BLOG:`${localPath}/api/Blog/GetFile`,
 }
 export default apiUrl;

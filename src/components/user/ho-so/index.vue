@@ -107,7 +107,120 @@
       </a-col>
       <a-col :flex="4">
         <a-card>
-          
+          <h4 style="font-size: 30px; font-weight: bold; justify-content: center;">THÀNH TỰU CÁ NHÂN</h4>
+
+
+          <div class="home_statistical">
+            <h5 style="font-size: 24px; font-weight: bold;">HỌC TẬP</h5>
+
+            <ul class="static-list">
+              <li>
+                <div class="static-number" style="background-image: url('https://quizlet.com/static/achievements/badge-StudiedWithFlashcards.svg');">
+                  <img src="https://quizlet.com/static/achievements/badge-StudiedWithFlashcards.svg" alt="Hình ảnh mẫu">
+                  
+                </div>
+                <div class="static-info">
+                  <label class="static-label">Tập sự thẻ ghi nhớ</label>
+                  <p class="static-text">22 tháng 5 năm 2023</p>
+                </div>
+                
+              </li>
+              <li>
+                <div class="static-number" style="background-image: url('https://quizlet.com/static/achievements/badge-StudiedWithLearn.svg');">
+                  <img src="https://quizlet.com/static/achievements/badge-StudiedWithLearn.svg" alt="Hình ảnh mẫu">
+
+                </div>
+                <div class="static-info">
+                  <label class="static-label">Học viên tích cực</label>
+                  <p class="static-text">16 tháng 6 năm 2023</p>
+                </div>
+                
+              </li>
+              <li>
+                <div class="static-number" style="background-image: url('https://quizlet.com/static/achievements/badge-ReachedEndOfLearn.svg');">
+                  <img src="https://quizlet.com/static/achievements/badge-ReachedEndOfLearn.svg" alt="Hình ảnh mẫu">
+
+                </div>
+                <div class="static-info">
+                  <label class="static-label">Cam kết học tập</label>
+                  <p class="static-text">13 tháng 6 năm 2023</p>
+                </div>
+                
+              </li>
+              <li>
+                <div class="static-number" style="background-image: url('https://quizlet.com/static/achievements/badge-EarlyBird.svg');">
+                  <img src="https://quizlet.com/static/achievements/badge-EarlyBird.svg" alt="Hình ảnh mẫu">
+                </div>
+                <div class="static-info">
+                  <label class="static-label">Chim sâu dậy sớm</label>
+                  <p class="static-text">20 tháng 6 năm 2023</p>
+                </div>
+                
+              </li>
+              <li>
+                <div class="static-number" style="background-image: url('https://quizlet.com/static/achievements/badge-StudiedWithTest.svg');">
+                  <img src="https://quizlet.com/static/achievements/badge-StudiedWithTest.svg" alt="Hình ảnh mẫu">
+                  
+                </div>
+                <div class="static-info">
+                  <label class="static-label">Tập sự kiểm tra</label>
+                  <p class="static-text">13 tháng 6 năm 2023</p>
+                </div>
+              </li>
+              <li>
+                <div class="static-number" style="background-image: url('https://quizlet.com/static/achievements/badge-NightOwl.svg');"> 
+                  <img src="https://quizlet.com/static/achievements/badge-NightOwl.svg" alt="Hình ảnh mẫu">
+                  
+                </div>
+                <div class="static-info">
+                  <label class="static-label">Cú đêm thức khuya</label>
+                  <p class="static-text">14 tháng 6 năm 2023</p>
+                </div>
+                
+              </li>
+            </ul>
+          </div>
+
+          <div class="home_statistical">
+            <h5 style="font-size: 24px; font-weight: bold;">CHUỖI NGÀY</h5>
+
+            <ul class="static-list">
+              <li>
+                <div class="static-number" style="background-image: url('https://quizlet.com/static/achievements/badge-StudiedWithFlashcards.svg');">
+                  <img src="https://quizlet.com/static/achievements/badge-Day.svg" alt="Hình ảnh mẫu">
+                  
+                </div>
+                <div class="static-info">
+                  <label class="static-label">Chuỗi 10 ngày liên tiếp</label>
+                  <p class="static-text">16 tháng 5 năm 2023</p>
+                </div>
+                
+              </li>
+              <li>
+                <div class="static-number" style="background-image: url('https://quizlet.com/static/achievements/badge-StudiedWithLearn.svg');">
+                  <img src="https://quizlet.com/static/achievements/badge-Week.svg" alt="Hình ảnh mẫu">
+
+                </div>
+                <div class="static-info">
+                  <label class="static-label">Chuỗi 1 tháng liên tiếp</label>
+                  <p class="static-text">24 tháng 4 năm 2023</p>
+                </div>
+                
+              </li>
+
+              <li>
+                <div class="static-number" style="background-image: url('https://quizlet.com/static/achievements/badge-EarlyBird.svg');">
+                  <img src="https://quizlet.com/static/achievements/badge-SetsStudied.svg" alt="Hình ảnh mẫu">
+                </div>
+                <div class="static-info">
+                  <label class="static-label">Chuỗi 3 tháng liên tiếp</label>
+                  <p class="static-text">11 tháng 2 năm 2023</p>
+                </div>
+                
+              </li>
+              
+            </ul>
+          </div>
         </a-card>
       </a-col>
     </a-row>
@@ -441,4 +554,41 @@ export default defineComponent({
   color: var(--ant-primary-color);
   margin-left: 10px;
 }
+
+.home_statistical{
+    margin: 0 100px;
+    padding: 0;
+  }
+  .home_statistical ul{
+    display: flex;
+    flex-flow: wrap;
+    padding: 0;
+  }
+
+  .home_statistical ul li{
+    width: 33.33%;
+    display: flex;
+    color: #333;
+    padding-bottom: 20px;
+    padding-top: 30px;
+  }
+
+  .home_statistical ul .static-number{
+    margin-right: 50px;
+    font-size: 35px;
+    font-weight: bold;
+  }
+
+  .home_statistical ul .static-number{
+    margin-right: 50px;
+    font-size: 35px;
+    font-weight: bold;
+  }
+
+  .static-info .static-label {
+    font-size: 20px;
+  }
+  .static-info .static-text{
+    font-size: 16px;
+  }
 </style>

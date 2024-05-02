@@ -1,5 +1,4 @@
 <template>
-  <div>
     <a-form
       :model="formState"
       ref="formRef"
@@ -59,7 +58,6 @@
         </a-form-item>
       </a-modal>
     </a-form>
-  </div>
 </template>
           
           <script>
@@ -243,7 +241,6 @@ export default defineComponent({
       layout,
       loading,
       rules,
-      plainOptions,
       showModal,
       onFinish,
       handleCancel,

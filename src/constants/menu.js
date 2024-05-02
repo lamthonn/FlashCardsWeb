@@ -65,6 +65,13 @@ const menuDefaut = [
         label: 'Liên hệ',
         title: 'Liên hệ',
     },
+    //liên hệ
+    {
+        key: 'Blog',
+        icon: () => h(ContactsOutlined),
+        label: 'Blog',
+        title: 'Blog',
+    },
     //cài đặt
     {
         key: 'CaiDat',

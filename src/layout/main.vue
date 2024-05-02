@@ -161,6 +161,10 @@ export default defineComponent({
         router.push("/lien-he");
         loading.value = false;
       }
+      if(val.key === "Blog"){
+        router.push("/blog-user");
+        loading.value = false;
+      }
       if(val.key === "CaiDat"){
         router.push("/cai-dat");
         loading.value = false;
@@ -169,7 +173,10 @@ export default defineComponent({
         router.push("/quan-ly-y-kien-dong-gop");
         loading.value = false;
       }
-      
+      if(val.key === "QuanLyBlog"){
+        router.push("/quan-ly-blog");
+        loading.value = false;
+      }
       if(val.key === "DangXuat"){
         sessionStorage.removeItem("Token");
         sessionStorage.removeItem("Role");

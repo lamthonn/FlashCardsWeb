@@ -35,6 +35,13 @@ const menuAdminDefaut = [
         label: 'Quản lý ý kiến đóng góp',
         title: 'Quản lý ý kiến đóng góp',
     },
+    //quản lý ý kiến đóng góp
+    {
+        key: 'QuanLyBlog',
+        icon: () => h(CommentOutlined),
+        label: 'Quản lý Blog',
+        title: 'Quản lý Blog',
+    },
     //cài đặt
     {
         key: 'CaiDat',
