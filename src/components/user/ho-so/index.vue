@@ -356,9 +356,6 @@ export default defineComponent({
               throw error;
           }
           }
-
-
-          
         }
 
         const getAvt = () => {

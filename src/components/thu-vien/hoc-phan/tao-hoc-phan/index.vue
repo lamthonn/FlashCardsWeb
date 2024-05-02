@@ -235,7 +235,8 @@ export default defineComponent({
     }
 
     const GetThuMuc = async () => {
-      await axios.get(apiUrl.GET_ALL_THU_MUC)
+      const userId = sessionStorage.getItem('userId');
+      await axios.get(`${apiUrl.GET_ALL_THU_MUC}?userId=${userId}`)
       .then(res => {
         thuMuc.value = res.data;
         console.log(res.data);

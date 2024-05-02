@@ -125,7 +125,7 @@ import apiUrl from "@/constants/api";
 import MainLayout from "@/layout/main.vue";
 import { notification } from "ant-design-vue";
 import axios from "axios";
-import { defineComponent, reactive, ref ,h } from "vue";
+import { defineComponent, reactive, ref ,h, watch } from "vue";
 import {
   ExclamationCircleOutlined
 } from '@ant-design/icons-vue';
@@ -166,12 +166,15 @@ export default defineComponent({
       const pageSize = ref(10)
       const pageNumber = ref(1)
       const totalRecord = ref(0)
+
       const getLog =async () => {
         loading.value = true;
         const userId = sessionStorage.getItem('userId')
         axios.get(`${apiUrl.NHAT_KY_HOAT_DONG}?UserId=${userId}&pageNumber=${pageNumber.value}&pageSize=${pageSize.value}`,{
           params:{
-            userId: userId
+            userId: userId,
+            pageNumber: pageNumber.value,
+            pageSize:pageSize.value
           }
         })
         .then(res => {
@@ -183,11 +186,11 @@ export default defineComponent({
           console.log(dataLog.value);
         })
         .catch(er => {
-          notification.open({
-            message: 'Lỗi',
-            description:`Có lỗi xảy ra: ${er}`,
-            icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
-          });
+          // notification.open({
+          //   message: 'Lỗi',
+          //   description:`Có lỗi xảy ra: ${er}`,
+          //   icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+          // });
           loading.value = false;
         })
       }
@@ -226,8 +229,6 @@ export default defineComponent({
             // const blob = new Blob([resa]);
             var url = URL.createObjectURL(resa.data);
             link.value = url;
-
-            console.log(url);
           })
           .catch(er => {
             console.log(er);
@@ -253,6 +254,10 @@ export default defineComponent({
     const ChangeInfor =() => {
       router.push('/ho-so')
     }
+
+    watch(pageNumber,async ()=> {
+      await getLog();
+    })
     return {
       userInfor,
       link,
@@ -276,8 +281,8 @@ export default defineComponent({
   },
   mounted(){
     this.getUserById();
-    this.getLog();
     this.getAvt();
+    this.getLog();
   }
 });
 </script>
