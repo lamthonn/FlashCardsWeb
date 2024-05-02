@@ -73,6 +73,26 @@ const routes = [
         
       },
       {
+        path: '/learn',
+        name: '/learn',
+        component: () => import('@/components/thu-vien/hoc-phan/games/Learn/chi-tiet.vue'),
+        meta: {
+          breadcrumb: 'Learning' 
+        },
+        props: true,
+        
+      },
+      {
+        path: '/test',
+        name: '/test',
+        component: () => import('@/components/thu-vien/hoc-phan/games/test-learning/TestLearning.vue'),
+        meta: {
+          breadcrumb: 'Kiểm tra' 
+        },
+        props: true,
+        
+      },
+      {
         path: '/sua-hoc-phan',
         name: '/sua-hoc-phan',
         component: () => import('@/components/thu-vien/hoc-phan/sua-hoc-phan/chi-tiet.vue'),

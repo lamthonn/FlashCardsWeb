@@ -10,7 +10,7 @@
     >
       <a-modal
         v-model:visible="visible"
-        title="Đổi mật khẩu"
+        title="Xóa tài khoản"
         @ok="handleOk"
         width="700px"
         :centered="true"
@@ -26,24 +26,16 @@
           >
         </template>
 
-        <a-form-item :name="['oldPassword']" label="Mật khẩu hiện tại">
-          <a-input v-model:value="formState.oldPassword" />
-        </a-form-item>
-
-        <a-form-item :name="['newPassword']" label="Mật khẩu mới">
-          <a-input-password v-model:value="formState.newPassword" />
-        </a-form-item>
-
-        <a-form-item :name="['newPasswordRepeat']" label="Nhập lại mật khẩu">
-          <a-input v-model:value="formState.newPasswordRepeat" />
+        <a-form-item :name="['Password']" label="Mật khẩu">
+          <a-input v-model:value="formState.Password" />
         </a-form-item>
 
       </a-modal>
     </a-form>
   </div>
 </template>
-        
-        <script>
+          
+          <script>
 import { defineComponent, ref, h, reactive } from "vue";
 import {
   UploadOutlined,
@@ -66,9 +58,7 @@ export default defineComponent({
     const wId = ref("");
     const visible = ref(false);
     const formState = reactive({
-      oldPassword: null,
-      newPasswordRepeat: null,
-      newPassword: null,
+      Password: null,
     });
     const layout = {
       labelCol: {
@@ -79,24 +69,10 @@ export default defineComponent({
       },
     };
     const rules = {
-      oldPassword: [
+      Password: [
         {
           required: true,
-          message: "Mật khẩu hiện tại không được để trống!",
-          trigger: "blur",
-        },
-      ],
-      newPasswordRepeat: [
-        {
-          required: true,
-          message: "Chưa nhập lại mật khẩu!",
-          trigger: "blur",
-        },
-      ],
-      newPassword: [
-        {
-          required: true,
-          message: "Mật khẩu mới không được để trống!",
+          message: "Mật khẩu không được để trống!",
           trigger: "blur",
         },
       ],
@@ -109,18 +85,14 @@ export default defineComponent({
     const onFinish = (values) => {};
     // Lưu
     const handleOk = async () => {
-      const userId = sessionStorage.getItem('userId')
-      try {
-        if(formState.newPassword === formState.newPasswordRepeat){
-        axios.put(`${apiUrl.CHANGED_PASSWORD}?userId=${userId}`,{
-          userId: userId,
-          oldPassword: formState.oldPassword,
-          newPassword: formState.newPassword
+        const userId = sessionStorage.getItem('userId')
+        axios.delete(`${apiUrl.DELETE_ACCOUNT}?userId=${userId}`,{
+            oldPassword: formState.Password
         })
         .then(res=> {
           notification.open({
             message: 'Thông báo',
-            description:`Đổi mật khẩu thành công`,
+            description:`Xóa tài khoảns thành công`,
             icon: () => h(CheckCircleOutlined, { style: "color: #108ee9" }),
           });
           visible.value = false;
@@ -133,22 +105,6 @@ export default defineComponent({
             });
             visible.value = false;
         })
-      }
-      else{
-        notification.open({
-          message: 'Lỗi',
-          description:`mật khẩu chưa trùng nhau`,
-          icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
-        });
-        visible.value = false;
-      }
-      } catch (error) {
-        notification.open({
-          message: 'Lỗi',
-          description:`Mật khẩu không đúng`,
-          icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
-        });
-      }
     };
     // Hủy
     const handleCancel = () => {

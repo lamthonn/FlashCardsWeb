@@ -18,8 +18,8 @@
     </template>
     <a-row :gutter="24" style="width:80%; margin-left:10%;margin-bottom:15px; display: flex; justify-content: space-between;">
         <!-- <a-button type="primary" class="btn-options"><CopyOutlined/> FlashCards</a-button> -->
-        <a-button type="primary" class="btn-options"><ContainerOutlined/> Learn</a-button>
-        <a-button type="primary" class="btn-options"><FormOutlined /> Test</a-button>
+        <a-button type="primary" class="btn-options" @click="LearnGame"><ContainerOutlined/> Learn</a-button>
+        <a-button type="primary" class="btn-options" @click="testLearning"><FormOutlined /> Test</a-button>
         <a-button type="primary" class="btn-options" @click="matchGame"><SwitcherFilled/> Match</a-button>
 
       
@@ -84,9 +84,9 @@
     </a-row>
 
     <a-row :gutter="24" style="width:80%; margin-left:10%; margin-top:35px; display: flex; justify-content: space-between;">
-      <h2>Bộ thẻ học (15)</h2>
+      <h2>Bộ thẻ học ({{ listTheHoc.length }})</h2>
       <a-select style="width:15%" v-model:value="sortCard">
-        <a-select-option value="Original">Original</a-select-option>
+        <a-select-option value="">Original</a-select-option>
         <a-select-option value="Alphabetical">Alphabetical</a-select-option>
       </a-select>
     </a-row>
@@ -117,7 +117,7 @@
 
 <script>
 
-import { defineComponent, h, ref } from 'vue';
+import { defineComponent, h, ref, watch } from 'vue';
 import MainLayout from "@/layout/main.vue";
 import { useRouter } from 'vue-router';
 import { 
@@ -163,7 +163,7 @@ export default defineComponent({
         const router = useRouter();
         const loading = ref(false)
         const isFlipped = ref(false);
-        const sortCard = ref("Original");
+        const sortCard = ref("");
         const listTheHoc = ref([]);
         const onToggleFlipCard = () => {
           isFlipped.value = !isFlipped.value
@@ -172,7 +172,7 @@ export default defineComponent({
 
         const GetHocPhanByID= async () => {
           const id = router.currentRoute.value.query.id;
-          await axios.get(`${apiUrl.GET_THE_HOC}?id=${id}`)
+          await axios.get(`${apiUrl.GET_THE_HOC}?id=${id}&soft=${sortCard.value}`)
           .then(res => {
             listTheHoc.value = res.data;
           })
@@ -269,8 +269,29 @@ export default defineComponent({
         }
 
         const matchGame = () => {
-          router.push(`match-game?id=${hocPhanData.value.id}`)
+          if(listTheHoc.value.length > 10){
+            router.push(`match-game?id=${hocPhanData.value.id}`)
+          }
+          else{
+            notification.open({
+              message: "Lỗi",
+              description: `Số thẻ không đủ để thực hiện chức năng Match Card`,
+              icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+            });
+          }
         }
+
+        const LearnGame = () => {
+          router.push(`learn?id=${hocPhanData.value.id}`)
+        }
+
+        const testLearning = () => {
+          router.push(`test?id=${hocPhanData.value.id}`)
+        }
+
+        watch(sortCard, () => {
+          GetHocPhanByID();
+        })
 
         return {
           router,
@@ -293,6 +314,8 @@ export default defineComponent({
           editHocPhan,
           getAvt,
           matchGame,
+          LearnGame,
+          testLearning,
         }
     },
     mounted(){

@@ -1,57 +1,87 @@
 <template>
-   <a-page-header
-        style="border: 1px solid rgb(235, 237, 240)"
-        :title="hocPhan.tieuDe"
-        @back="backPage"
-    />
-    <div style="margin:10px 0; text-align:center;">
-        Thời gian 1:12
-    </div>
-    <a-card class="Maingame">
-        <div style="display: flex;width: 100%;flex-wrap: wrap;">
-            <a-card class="flashCard" v-for="(item, index) in listTheHoc1" @click="handleSelect(item)" :key="index">
-                <p style="font-size:20px;">{{ item.ngonNgu1 }}</p>
-            </a-card>
-            <a-card class="flashCard" v-for="(item, index) in listTheHoc2" @click="handleSelect(item)" :key="index">
-                <p style="font-size:20px;">{{ item.ngonNgu2 }}</p>
-            </a-card>
+    
+    <!-- làm lại -->
+    <div class="screemMain">
+        <div style="margin:10px 0; text-align:center;">
+            Thời gian {{ formattedTime }}
         </div>
-    </a-card>
+        <a-card class="Maingame">
+            <div style="display: flex;width: 100%;flex-wrap: wrap;">
+            <CardFlipped 
+                v-for="(item, index) in listTheHoc1" 
+                :key="index"
+                :data="item"
+                :title="item.ngonNgu1"
+                :ref="setCardRef"
+                @onFlip ="checkRule($event, index)"
+            />
+            <CardFlipped 
+                v-for="(item, index) in listTheHoc2" 
+                :key="index"
+                :data="item"
+                :title="item.ngonNgu2"
+                :ref="setCardRef"
+                @onFlip ="checkRule($event, index + 10)"
+            />
+        </div>
+        </a-card>
+    </div>
 </template>
 
 <script>
 import apiUrl from '@/constants/api';
 import { Modal, notification } from 'ant-design-vue';
 import axios from 'axios';
-import { createVNode, defineComponent, ref, h, watch } from 'vue';
+import { createVNode, defineComponent, ref, h, watch, onUnmounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import {
     ExclamationCircleOutlined
 }  from "@ant-design/icons-vue"
+import CardFlipped from '../card/Card.vue'
+
 export default defineComponent({
     name:'start-game',
+    
     components:{
+        CardFlipped,
         ExclamationCircleOutlined
     },
-    setup(){
+    setup(props, context){
         const open = ref(true)
         const loading = ref(false)
         const router = useRouter();
-        const hocPhan = ref({});
-        const isSelected = ref([])
         const listTheHoc1 = ref([])
         const listTheHoc2 = ref([])
+        const time = ref(0)
+        let intervalId = null;
 
-        const backPage = () => {
-            router.go(-1);
+        const startTimer = () => {
+        if (!loading.value) {
+            loading.value = true;
+            intervalId = setInterval(() => {
+            time.value++;
+            }, 1000);
         }
+        };
+
+        const stopTimer = () => {
+        if (loading.value) {
+            loading.value = false;
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+        };
+
+        onUnmounted(() => {
+            clearInterval(intervalId);
+        });
 
         const getRandom = async () => {
             const id = router.currentRoute.value.query.id;
             await axios.get(`${apiUrl.GET_RANDOM_THE_HOC}?id=${id}`)
             .then(res => {
-                listTheHoc1.value = res.data;
-                listTheHoc2.value = res.data;
+                listTheHoc1.value = res.data.slice(0, res.data.length / 2);
+                listTheHoc2.value = res.data.slice(res.data.length / 2);
 
                 console.log(listTheHoc1.value);
             })
@@ -64,85 +94,94 @@ export default defineComponent({
             })
         }
 
-        const handleSelect = (item) => {
-            isSelected.value.push(item.id)
-            checkRule([...isSelected.value]);
+        const cardRefs = ref([]);
+        const setCardRef = el => {
+        if (el) {
+            cardRefs.value.push(el);
         }
+        };
+        const rule = ref([])
+        const refIndex = ref([])
+        const match = ref([])
+        const checkRule =(data, index) =>{
+            refIndex.value.push(index);
+            rule.value.push(data);
+            if (rule.value.length === 2) {
+                if (rule.value[0].id === rule.value[1].id) {
+                    // Cả hai thẻ cùng ID
+                    refIndex.value.forEach(index => {
+                        match.value.push(index);
+                        checkWinner();
+                        setTimeout(() => {
+                            cardRefs.value[index].onFlipBackCard();
+                            cardRefs.value[index].onFlipBackCard();
 
-        const checkRule =(item) =>{
-            if(item.length === 2){
-                if(item[0] === item[1]){
-                    //xử lý khi ghép thẻ thành công
-                    console.log("huhu");
+                            cardRefs.value[index].onEnableDisableMode();
+                            cardRefs.value[index].onEnableDisableMode();
+                        }, 200);
+                    })
+                    rule.value = [];
+                    refIndex.value = [];
+                } else {
+                    // Không cùng ID
+                    refIndex.value.forEach(index => {
+                        setInterval(() => {
+                            cardRefs.value[index].onFlipBackCard();
+                            cardRefs.value[index].onFlipBackCard();
+                        }, 300);
+                    })
+                    rule.value = [];
+                    refIndex.value = [];
                 }
-                isSelected.value = []
             }
-
-            // console.log(listTheHoc1.value.length);
-            // console.log(listTheHoc2.value.length);
         }
 
-        const getHocPhanName = async () =>{
-            const id = router.currentRoute.value.query.id; 
-            await axios.get(`${apiUrl.GET_HOC_PHAN_BY_ID}?id=${id}`)
-            .then(res => {
-                hocPhan.value = res.data;
-            })
-            .catch(er => {
-                console.log(er);
-            })
+        const checkWinner = () => {
+            if(match.value.length === 20)
+            {
+                context.emit('winGame',formattedTime.value.toString())
+            }
         }
+
+        const formattedTime = computed(() => {
+            const minutes = Math.floor(time.value / 60);
+            const seconds = time.value % 60;
+            return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        });
 
         return {
             open,
-            backPage,
+            cardRefs,
+            refIndex,
+            setCardRef,
             getRandom,
-            getHocPhanName,
             loading,
+            time,
             router,
-            hocPhan,
-            isSelected,
             listTheHoc1,
             listTheHoc2,
-            handleSelect,
-            checkRule
+            rule,
+            match,
+            checkRule,
+            startTimer,
+            checkWinner,
+            formattedTime,
         }
     },
     mounted(){
-        this.getHocPhanName();
-        // Modal.confirm({
-        //     title: 'Bạn đã sẵn sàng?',
-        //     content: createVNode('div', { style: 'color:black;' }, 'Hãy ghép tất cả thuật ngữ với định nghĩa của chúng nhanh nhất có thể.'),
-        //     onOk() {
-        //         console.log('OK');
-        //     },
-        //     onCancel() {
-        //         console.log('Cancel');
-        //     },
-        // })  
+        this.startTimer();
         this.getRandom();
     }
 })
+
+
 </script>
 
 <style scoped>
     .Maingame{
-        /* height: 90vh; */
-        width: 80%;
-        margin-left: 10%;
         margin-top: 15px;
-        background-color: rgb(214, 214, 214);
-    }
-    .flashCard{
-        background-color: rgb(255, 255, 255);
-        width: 18%;
-        margin:5px 1%;
-        height: 90px;
-        text-align: center;
-        cursor: pointer;
+        background-color: rgb(231, 231, 231);
     }
 
-    .isChoose{
-        background-color: rgb(107, 171, 228);
-    }
+
 </style>

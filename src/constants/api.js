@@ -7,6 +7,8 @@ const apiUrl = {
     DANG_KY_FACEBOOK: `${localPath}/api/Auth/RegisterWithFacebook`,
     DANG_KY: `${localPath}/api/Auth/Register`,
     CHECK_TOKEN_FACEBOOK:`${localPath}/api/Auth/ValidateFacebookToken`,
+    CHANGED_PASSWORD:`${localPath}/api/Auth/ChangePassword`,
+    DELETE_ACCOUNT:`${localPath}/api/Auth/DeleteAccount`,
 
     //Role
     GET_ALL_ROLE:`${localPath}/api/User/GetAllRole`,
@@ -32,6 +34,9 @@ const apiUrl = {
     DELETE_HOC_PHAN:`${localPath}/api/HocPhan/DeleteHocPhan`,
     EDIT_HOC_PHAN:`${localPath}/api/HocPhan/EditHocPhan`,
     GET_RANDOM_THE_HOC:`${localPath}/api/HocPhan/GetRandom`,
+    GET_CARD_FOR_LEARN:`${localPath}/api/HocPhan/GetCardForLearn`,
+    GET_LIST_CARD_FOR_TEST:`${localPath}/api/HocPhan/GetListCardForTest`,
+    CHECK_RESULT_1:`${localPath}/api/HocPhan/CheckResult1`,
 
     //Thư mục
     GET_ALL_THU_MUC:`${localPath}/api/ThuMuc/GetAllThuMuc`,

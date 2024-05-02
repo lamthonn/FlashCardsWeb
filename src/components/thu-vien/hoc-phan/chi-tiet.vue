@@ -10,10 +10,8 @@
             <a-row style="margin-bottom:2rem;">
                 <a-col :span="12">
                     <a-select v-model:value="fromState.trangthai">
-                        <a-select-option value="Gần đây" defaultOpen>Gần đây</a-select-option>
-                        <a-select-option value="Đã tạo">Đã tạo</a-select-option>
-                        <a-select-option value="Đã học">Đã học</a-select-option>
-                        <a-select-option value="Đãhọc">Gần đây</a-select-option>
+                        <a-select-option value="" defaultOpen>Gần đây</a-select-option>
+                        <a-select-option value="Alphabetical">Alphabetical</a-select-option>
                     </a-select>
                 </a-col>
                 <a-col :span="12">
@@ -100,7 +98,7 @@ export default defineComponent({
             var token = sessionStorage.getItem("Token")
             const userId = sessionStorage.getItem('userId');
             //get username
-            await axios.get(`${apiUrl.GET_ALL_HOC_PHAN}?thuMucId=${id ?? ''}&userId=${userId}`)
+            await axios.get(`${apiUrl.GET_ALL_HOC_PHAN}?thuMucId=${id ?? ''}&userId=${userId}&soft=${fromState.trangthai}`)
             .then(async (res) => {
                 ListHocPhan.value = res.data
                 console.log(res.data);

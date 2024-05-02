@@ -106,7 +106,7 @@
               <a-row>
                 <a-col :span="20">Xóa tài khoản</a-col>
                 <a-col :span="4">
-                  <a-button type="primary" danger>
+                  <a-button type="primary" danger @click="xoaTaiKhoan">
                     Xóa tài khoản
                   </a-button>
                 </a-col>
@@ -117,6 +117,7 @@
     </div>
   </MainLayout>
   <DoiMatKhau ref="DoiMatKhauRef"/>
+  <XoaTaiKhoan ref="XoaTaiKhoanRef"/>
 </template>
   
   <script>
@@ -124,19 +125,21 @@ import apiUrl from "@/constants/api";
 import MainLayout from "@/layout/main.vue";
 import { notification } from "ant-design-vue";
 import axios from "axios";
-import { defineComponent, reactive, ref ,h } from "vue";
+import { defineComponent, reactive, ref ,h, watch } from "vue";
 import {
   ExclamationCircleOutlined
 } from '@ant-design/icons-vue';
 import { useRouter } from "vue-router";
 import moment from "moment"
 import DoiMatKhau from './doi-mat-khau/chi-tiet.vue'
+import XoaTaiKhoan from './xoa-tai-khoan/chi-tiet.vue'
 
 export default defineComponent({
   components: {
     MainLayout,
     ExclamationCircleOutlined,
-    DoiMatKhau
+    DoiMatKhau,
+    XoaTaiKhoan
   },
   setup() {
     const router = useRouter();
@@ -163,12 +166,15 @@ export default defineComponent({
       const pageSize = ref(10)
       const pageNumber = ref(1)
       const totalRecord = ref(0)
+
       const getLog =async () => {
         loading.value = true;
         const userId = sessionStorage.getItem('userId')
         axios.get(`${apiUrl.NHAT_KY_HOAT_DONG}?UserId=${userId}&pageNumber=${pageNumber.value}&pageSize=${pageSize.value}`,{
           params:{
-            userId: userId
+            userId: userId,
+            pageNumber: pageNumber.value,
+            pageSize:pageSize.value
           }
         })
         .then(res => {
@@ -180,11 +186,11 @@ export default defineComponent({
           console.log(dataLog.value);
         })
         .catch(er => {
-          notification.open({
-            message: 'Lỗi',
-            description:`Có lỗi xảy ra: ${er}`,
-            icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
-          });
+          // notification.open({
+          //   message: 'Lỗi',
+          //   description:`Có lỗi xảy ra: ${er}`,
+          //   icon: () => h(ExclamationCircleOutlined, { style: "color: red" }),
+          // });
           loading.value = false;
         })
       }
@@ -223,8 +229,6 @@ export default defineComponent({
             // const blob = new Blob([resa]);
             var url = URL.createObjectURL(resa.data);
             link.value = url;
-
-            console.log(url);
           })
           .catch(er => {
             console.log(er);
@@ -237,6 +241,11 @@ export default defineComponent({
       DoiMatKhauRef.value.visible = true;
     }
 
+    //xóa tài khoản
+    const XoaTaiKhoanRef = ref();
+    const xoaTaiKhoan = () => {
+      XoaTaiKhoanRef.value.visible = true;
+    }
     //code generate - no change
     const formatDateToIsoStringHHss = (date) => {
       return moment(date).subtract(7, 'h').format('HH:mm:ss DD-MM-yyyy')
@@ -245,6 +254,10 @@ export default defineComponent({
     const ChangeInfor =() => {
       router.push('/ho-so')
     }
+
+    watch(pageNumber,async ()=> {
+      await getLog();
+    })
     return {
       userInfor,
       link,
@@ -256,18 +269,20 @@ export default defineComponent({
       pageNumber,
       totalRecord,
       DoiMatKhauRef,
+      XoaTaiKhoanRef,
       getUserById,
       ChangeInfor,
       formatDateToIsoStringHHss,
       getLog,
       getAvt,
-      doiMatKhau
+      doiMatKhau,
+      xoaTaiKhoan
     }
   },
   mounted(){
     this.getUserById();
-    this.getLog();
     this.getAvt();
+    this.getLog();
   }
 });
 </script>
